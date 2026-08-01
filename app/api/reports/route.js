@@ -20,6 +20,8 @@ export const GET = withErrorHandling(async (req) => {
   if (modulo) q.modulo = modulo;
   const ambiente = searchParams.get('ambiente');
   if (ambiente) q.ambiente = ambiente;
+  const tipo = searchParams.get('tipo');
+  if (tipo) q.tipo = tipo;
   const desde = searchParams.get('desde');
   const hasta = searchParams.get('hasta');
   if (desde || hasta) {

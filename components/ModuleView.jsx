@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Prioridad, Estado, Ambiente, Tipo } from '@/components/Badge';
 import ReportForm from '@/components/ReportForm';
+import { TIPOS } from '@/lib/constants';
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
@@ -15,12 +16,13 @@ export default function ModuleView({ modulo, rol, nombre }) {
   const [pagina, setPagina] = useState(1);
   const [cargando, setCargando] = useState(true);
   const [creando, setCreando] = useState(false);
-  const [filtros, setFiltros] = useState({ ambiente: '', desde: '', hasta: '' });
+  const [filtros, setFiltros] = useState({ ambiente: '', tipo: '', desde: '', hasta: '' });
 
   const cargar = useCallback(async () => {
     setCargando(true);
     const p = new URLSearchParams({ modulo: modulo.slug, page: String(pagina), limit: String(PAGE_SIZE) });
     if (filtros.ambiente) p.set('ambiente', filtros.ambiente);
+    if (filtros.tipo) p.set('tipo', filtros.tipo);
     if (filtros.desde) p.set('desde', filtros.desde);
     if (filtros.hasta) p.set('hasta', filtros.hasta);
     const res = await fetch(`/api/reports?${p.toString()}`);
@@ -58,6 +60,14 @@ export default function ModuleView({ modulo, rol, nombre }) {
           </select>
         </div>
         <div>
+          <label className="label">Tipo</label>
+          <select className="input" value={filtros.tipo}
+            onChange={(e) => setFiltros((f) => ({ ...f, tipo: e.target.value }))}>
+            <option value="">Todos</option>
+            {TIPOS.map((t) => <option key={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
           <label className="label">Desde</label>
           <input type="date" className="input" value={filtros.desde}
             onChange={(e) => setFiltros((f) => ({ ...f, desde: e.target.value }))} />
@@ -67,8 +77,8 @@ export default function ModuleView({ modulo, rol, nombre }) {
           <input type="date" className="input" value={filtros.hasta}
             onChange={(e) => setFiltros((f) => ({ ...f, hasta: e.target.value }))} />
         </div>
-        {(filtros.ambiente || filtros.desde || filtros.hasta) && (
-          <button className="btn-ghost" onClick={() => setFiltros({ ambiente: '', desde: '', hasta: '' })}>
+        {(filtros.ambiente || filtros.tipo || filtros.desde || filtros.hasta) && (
+          <button className="btn-ghost" onClick={() => setFiltros({ ambiente: '', tipo: '', desde: '', hasta: '' })}>
             Limpiar
           </button>
         )}
