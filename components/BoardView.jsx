@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Prioridad, Ambiente, Tipo } from '@/components/Badge';
+import { Prioridad, Ambiente, Tipo, Nuevo } from '@/components/Badge';
 import { ESTADOS } from '@/lib/constants';
+import { esReporteNuevo } from '@/lib/reportRules';
 
 const COLUMNAS = [
   { key: '', label: 'Sin estado' },
@@ -60,6 +61,7 @@ export default function BoardView({ reportes, esTech, onMover }) {
                   </div>
                   <p className="line-clamp-3 whitespace-pre-wrap text-slate-700 mb-2">{r.descripcion}</p>
                   <div className="flex flex-wrap gap-1 mb-2">
+                    {esReporteNuevo(r) && <Nuevo />}
                     <Tipo value={r.tipo} />
                     <Prioridad value={r.prioridad} />
                     <Ambiente value={r.ambiente} />

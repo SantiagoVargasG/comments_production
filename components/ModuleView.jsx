@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Prioridad, Estado, Ambiente, Tipo } from '@/components/Badge';
+import { Prioridad, Estado, Ambiente, Tipo, Nuevo } from '@/components/Badge';
 import ReportForm from '@/components/ReportForm';
 import BoardView from '@/components/BoardView';
 import { TIPOS } from '@/lib/constants';
+import { esReporteNuevo } from '@/lib/reportRules';
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
@@ -147,7 +148,8 @@ export default function ModuleView({ modulo, rol, nombre }) {
                   <tr key={r._id} className={`align-top hover:bg-slate-50 ${!r.estado ? 'bg-fuchsia-50/40' : ''}`}>
                     <td className="px-3 py-3 text-slate-400">{r.consecutivo}</td>
                     <td className="px-3 py-3 max-w-[420px]">
-                      <div className="line-clamp-3 whitespace-pre-wrap text-slate-700">{r.descripcion}</div>
+                      {esReporteNuevo(r) && <Nuevo />}
+                      <div className="line-clamp-3 whitespace-pre-wrap text-slate-700 mt-1">{r.descripcion}</div>
                     </td>
                     <td className="px-3 py-3"><Tipo value={r.tipo} /></td>
                     <td className="px-3 py-3"><Prioridad value={r.prioridad} /></td>

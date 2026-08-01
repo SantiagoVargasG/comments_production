@@ -22,3 +22,6 @@ export function Tipo({ value }) {
   if (!value) return <span className="text-slate-300">—</span>;
   return <Badge className={TIPO_COLOR[value] || 'bg-slate-100'}>{value}</Badge>;
 }
+export function Nuevo() {
+  return <Badge className="bg-amber-100 text-amber-800 ring-1 ring-amber-300 font-semibold">Nuevo</Badge>;
+}

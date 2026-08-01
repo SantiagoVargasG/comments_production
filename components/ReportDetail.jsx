@@ -2,10 +2,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Prioridad, Estado, Ambiente, Tipo } from '@/components/Badge';
+import { Prioridad, Estado, Ambiente, Tipo, Nuevo } from '@/components/Badge';
 import EvidenceViewer from '@/components/EvidenceViewer';
 import EvidenceUploader from '@/components/EvidenceUploader';
 import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS } from '@/lib/constants';
+import { esReporteNuevo } from '@/lib/reportRules';
 
 const fechaHora = (d) => new Date(d).toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
@@ -101,6 +102,7 @@ export default function ReportDetail({ id, rol, nombre }) {
           </div>
         ) : (
           <div className="flex flex-wrap gap-2 mt-4">
+            {esReporteNuevo(r) && <Nuevo />}
             <Tipo value={r.tipo} /><Prioridad value={r.prioridad} /><Estado value={r.estado} /><Ambiente value={r.ambiente} />
             {r.version && <span className="badge bg-slate-100 text-slate-600">v: {r.version}</span>}
             <span className="badge bg-slate-100 text-slate-500">Creado por {r.creadoPorNombre} · {r.creadoPorRol}</span>
