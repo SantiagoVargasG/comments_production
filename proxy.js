@@ -3,7 +3,7 @@ import { verificarToken, COOKIE_NAME } from '@/lib/auth';
 
 const PUBLIC = ['/login', '/api/auth/login'];
 
-export async function middleware(req) {
+export async function proxy(req) {
   const { pathname } = req.nextUrl;
   if (PUBLIC.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
     return NextResponse.next();

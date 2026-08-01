@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Prioridad, Estado, Ambiente, Tipo } from '@/components/Badge';
 import EvidenceViewer from '@/components/EvidenceViewer';
 import EvidenceUploader from '@/components/EvidenceUploader';
@@ -9,6 +10,7 @@ import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS } from '@/lib/constants
 const fechaHora = (d) => new Date(d).toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
 export default function ReportDetail({ id, rol, nombre }) {
+  const router = useRouter();
   const esTech = rol === 'tech';
   const [r, setR] = useState(null);
   const [editando, setEditando] = useState(false);
@@ -46,6 +48,18 @@ export default function ReportDetail({ id, rol, nombre }) {
     if (res.ok) { setEditando(false); cargar(); }
   }
 
+  async function eliminarReporte() {
+    if (!confirm('¿Eliminar este reporte? Esta acción no se puede deshacer.')) return;
+    const res = await fetch(`/api/reports/${id}`, { method: 'DELETE' });
+    if (res.ok) router.push(`/modulos/${r.modulo}`);
+  }
+
+  async function eliminarComentario(commentId) {
+    if (!confirm('¿Eliminar este comentario?')) return;
+    const res = await fetch(`/api/reports/${id}/comments/${commentId}`, { method: 'DELETE' });
+    if (res.ok) cargar();
+  }
+
   if (!r) return <p className="text-slate-400">Cargando…</p>;
   const modulo = MODULOS[r.modulo];
 
@@ -66,7 +80,10 @@ export default function ReportDetail({ id, rol, nombre }) {
             )}
           </div>
           {esTech && !editando && (
-            <button className="btn-ghost shrink-0" onClick={() => setEditando(true)}>Editar</button>
+            <div className="flex gap-2 shrink-0">
+              <button className="btn-ghost" onClick={() => setEditando(true)}>Editar</button>
+              <button className="btn-ghost text-red-600" onClick={eliminarReporte}>Eliminar</button>
+            </div>
           )}
         </div>
 
@@ -105,7 +122,12 @@ export default function ReportDetail({ id, rol, nombre }) {
           <div key={c._id} className="card p-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{c.autorNombre} <span className={`badge ml-1 ${c.autorRol === 'tech' ? 'bg-ink text-white' : 'bg-fuchsia-100 text-fuchsia-700'}`}>{c.autorRol}</span></span>
-              <span className="text-xs text-slate-400">{fechaHora(c.createdAt)}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-400">{fechaHora(c.createdAt)}</span>
+                {esTech && (
+                  <button className="text-xs text-red-600 hover:underline" onClick={() => eliminarComentario(c._id)}>Eliminar</button>
+                )}
+              </div>
             </div>
             {c.texto && <p className="text-sm text-slate-700 mt-2 whitespace-pre-wrap">{c.texto}</p>}
             <EvidenceViewer evidencias={c.evidencias} />

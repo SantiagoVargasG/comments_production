@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import { Report } from '@/lib/models';
 import { getSesion } from '@/lib/auth';
+import { withErrorHandling } from '@/lib/apiHandler';
 
 export const runtime = 'nodejs';
 
-export async function POST(req, { params }) {
+export const POST = withErrorHandling(async (req, { params }) => {
   const sesion = await getSesion();
   if (!sesion) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  const { id } = await params;
   const { texto, evidencias } = await req.json();
   if (!texto?.trim() && !(evidencias?.length))
     return NextResponse.json({ error: 'Escribe un comentario o adjunta evidencia' }, { status: 400 });
@@ -20,10 +22,10 @@ export async function POST(req, { params }) {
     createdAt: new Date(),
   };
   const report = await Report.findByIdAndUpdate(
-    params.id,
+    id,
     { $push: { comentarios: comentario } },
-    { new: true }
+    { returnDocument: 'after' }
   ).lean();
   if (!report) return NextResponse.json({ error: 'No existe' }, { status: 404 });
   return NextResponse.json(report.comentarios[report.comentarios.length - 1]);
-}
+});

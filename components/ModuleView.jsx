@@ -6,25 +6,34 @@ import ReportForm from '@/components/ReportForm';
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
+const PAGE_SIZE = 20;
+
 export default function ModuleView({ modulo, rol, nombre }) {
   const esTech = rol === 'tech';
   const [reportes, setReportes] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [pagina, setPagina] = useState(1);
   const [cargando, setCargando] = useState(true);
   const [creando, setCreando] = useState(false);
   const [filtros, setFiltros] = useState({ ambiente: '', desde: '', hasta: '' });
 
   const cargar = useCallback(async () => {
     setCargando(true);
-    const p = new URLSearchParams({ modulo: modulo.slug });
+    const p = new URLSearchParams({ modulo: modulo.slug, page: String(pagina), limit: String(PAGE_SIZE) });
     if (filtros.ambiente) p.set('ambiente', filtros.ambiente);
     if (filtros.desde) p.set('desde', filtros.desde);
     if (filtros.hasta) p.set('hasta', filtros.hasta);
     const res = await fetch(`/api/reports?${p.toString()}`);
-    setReportes(res.ok ? await res.json() : []);
+    const data = res.ok ? await res.json() : { items: [], total: 0 };
+    setReportes(data.items);
+    setTotal(data.total);
     setCargando(false);
-  }, [modulo.slug, filtros]);
+  }, [modulo.slug, filtros, pagina]);
 
+  useEffect(() => { setPagina(1); }, [filtros]);
   useEffect(() => { cargar(); }, [cargar]);
+
+  const totalPaginas = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <div>
@@ -63,7 +72,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
             Limpiar
           </button>
         )}
-        <div className="ml-auto text-sm text-slate-400 self-center">{reportes.length} reportes</div>
+        <div className="ml-auto text-sm text-slate-400 self-center">{total} reportes</div>
       </div>
 
       {/* tabla */}
@@ -113,6 +122,18 @@ export default function ModuleView({ modulo, rol, nombre }) {
           </table>
         </div>
       </div>
+
+      {totalPaginas > 1 && (
+        <div className="flex items-center justify-center gap-3 mt-4 text-sm">
+          <button className="btn-ghost" disabled={pagina <= 1} onClick={() => setPagina((p) => p - 1)}>
+            ← Anterior
+          </button>
+          <span className="text-slate-500">Página {pagina} de {totalPaginas}</span>
+          <button className="btn-ghost" disabled={pagina >= totalPaginas} onClick={() => setPagina((p) => p + 1)}>
+            Siguiente →
+          </button>
+        </div>
+      )}
 
       {creando && (
         <ReportForm

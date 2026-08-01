@@ -6,7 +6,8 @@ import ModuleView from '@/components/ModuleView';
 export const dynamic = 'force-dynamic';
 
 export default async function ModuloPage({ params }) {
-  const modulo = MODULOS[params.modulo];
+  const { modulo: slug } = await params;
+  const modulo = MODULOS[slug];
   if (!modulo) notFound();
   const sesion = await getSesion();
   return <ModuleView modulo={modulo} rol={sesion.rol} nombre={sesion.nombre} />;

@@ -29,8 +29,10 @@ const ReportSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+const CounterSchema = new mongoose.Schema({ _id: String, seq: { type: Number, default: 0 } });
 const User = mongoose.models.User || mongoose.model('User', UserSchema);
 const Report = mongoose.models.Report || mongoose.model('Report', ReportSchema);
+const Counter = mongoose.models.Counter || mongoose.model('Counter', CounterSchema);
 
 async function run() {
   if (!process.env.MONGODB_URI) throw new Error('Falta MONGODB_URI en .env');
@@ -53,14 +55,23 @@ async function run() {
   const total = await Report.countDocuments();
   if (total === 0) {
     const counters = {};
-    const docs = data.map((d) => {
+    const docs = data.map(({ creadoPor, ...d }) => {
       counters[d.modulo] = (counters[d.modulo] || 0) + 1;
       return {
         ...d, consecutivo: counters[d.modulo],
-        evidencias: [], comentarios: [], creadoPorNombre: ADMIN.nombre,
+        evidencias: [], comentarios: [],
+        creadoPorRol: creadoPor === 'cliente' ? 'cliente' : 'tech',
+        creadoPorNombre: ADMIN.nombre,
       };
     });
     await Report.insertMany(docs);
+    // La app usa un contador atómico por módulo (lib/models.js) para futuros
+    // reportes; lo dejamos en el último consecutivo importado por módulo.
+    await Promise.all(
+      Object.entries(counters).map(([modulo, seq]) =>
+        Counter.findByIdAndUpdate(modulo, { $set: { seq } }, { upsert: true })
+      )
+    );
     console.log(`Importados ${docs.length} reportes desde el Excel.`);
   } else {
     console.log(`Ya hay ${total} reportes, no se importa nada.`);

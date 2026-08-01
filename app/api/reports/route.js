@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
-import { Report } from '@/lib/models';
+import { Report, siguienteConsecutivo } from '@/lib/models';
 import { getSesion } from '@/lib/auth';
-import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES } from '@/lib/constants';
+import { withErrorHandling } from '@/lib/apiHandler';
+import { construirCamposPorRol } from '@/lib/reportRules';
 
 export const runtime = 'nodejs';
 
-export async function GET(req) {
+const PAGE_SIZE_DEFAULT = 20;
+const PAGE_SIZE_MAX = 100;
+
+export const GET = withErrorHandling(async (req) => {
   const sesion = await getSesion();
   if (!sesion) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   await dbConnect();
@@ -23,49 +27,40 @@ export async function GET(req) {
     if (desde) q.createdAt.$gte = new Date(desde);
     if (hasta) { const h = new Date(hasta); h.setHours(23, 59, 59, 999); q.createdAt.$lte = h; }
   }
-  const reports = await Report.find(q)
-    .select('-comentarios')
-    .sort({ createdAt: -1 })
-    .lean();
-  return NextResponse.json(reports);
-}
 
-export async function POST(req) {
+  const page = Math.max(1, parseInt(searchParams.get('page'), 10) || 1);
+  const pageSize = Math.min(PAGE_SIZE_MAX, Math.max(1, parseInt(searchParams.get('limit'), 10) || PAGE_SIZE_DEFAULT));
+
+  const [items, total] = await Promise.all([
+    Report.find(q)
+      .select('-comentarios')
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .lean(),
+    Report.countDocuments(q),
+  ]);
+
+  return NextResponse.json({ items, total, page, pageSize });
+});
+
+export const POST = withErrorHandling(async (req) => {
   const sesion = await getSesion();
   if (!sesion) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   const body = await req.json();
   if (!body.modulo || !body.descripcion)
     return NextResponse.json({ error: 'Módulo y descripción son obligatorios' }, { status: 400 });
+  if (!body.descripcion.trim())
+    return NextResponse.json({ error: 'Módulo y descripción son obligatorios' }, { status: 400 });
   await dbConnect();
 
-  const esTech = sesion.rol === 'tech';
   const doc = {
-    modulo: body.modulo,
-    descripcion: body.descripcion.trim(),
-    tipo: TIPOS.includes(body.tipo) ? body.tipo : 'Error',
-    evidencias: Array.isArray(body.evidencias) ? body.evidencias : [],
+    ...construirCamposPorRol(sesion.rol, body),
     creadoPorRol: sesion.rol,
     creadoPorNombre: sesion.nombre,
+    consecutivo: await siguienteConsecutivo(body.modulo),
   };
-
-  if (esTech) {
-    // tech puede definir estados
-    doc.prioridad = PRIORIDADES.includes(body.prioridad) ? body.prioridad : null;
-    doc.estado = ESTADOS.includes(body.estado) ? body.estado : null;
-    doc.ambiente = AMBIENTES.includes(body.ambiente) ? body.ambiente : 'Pendiente';
-    doc.version = body.version || '';
-  } else {
-    // cliente: SIN estados, para identificarlo fácil
-    doc.prioridad = null;
-    doc.estado = null;
-    doc.ambiente = 'Pendiente';
-    doc.version = '';
-  }
-
-  // consecutivo por módulo
-  const ultimo = await Report.findOne({ modulo: doc.modulo }).sort({ consecutivo: -1 }).select('consecutivo').lean();
-  doc.consecutivo = (ultimo?.consecutivo || 0) + 1;
 
   const report = await Report.create(doc);
   return NextResponse.json(report);
-}
+});
