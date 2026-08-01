@@ -1,6 +1,12 @@
 // Crea el primer usuario tech e importa los reportes del Excel.
-// Uso: node scripts/seed.mjs   (requiere .env con MONGODB_URI)
-import 'dotenv/config';
+// Uso: node scripts/seed.mjs   (requiere .env.local con MONGODB_URI)
+import { config } from 'dotenv';
+config({ path: '.env.local' });
+import dns from 'node:dns';
+// Algunos ISP no resuelven bien registros SRV con el resolutor DNS interno
+// de Node (usado por mongodb+srv://); forzar un DNS público evita el
+// ECONNREFUSED en la búsqueda SRV del cluster de Atlas.
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import fs from 'node:fs';
