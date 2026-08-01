@@ -1,0 +1,902 @@
+[
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "1. cuando me registro en la app y voy a cambiar la foto de perfil, despues de selecionar la foto se pone negra la pantalla. SE DEMORA MUCHO EN CARGAR",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "1.1 Al editar una foto de perfil, y seleccionar la foto desde la galería, el tiempo que toma la app en cargarla es de apróximadamente 5seg. SE DEMORA MUCHO EN CARGAR",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Revisar con el equipo el tiempo de carga al abrir la app",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Subir calidad de videos y agregar loading",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Agrgar loading de carga en videos para que no se vea pantalla blanca",
+  "prioridad": "Media",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Loopzii 15: aveces hay historias que se demoran mucho en cargar y la línea verde del tiempo avanza y no sale nada o sale case al final de la línea verde",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Loopzii 18: error en historia, hay historias que no salen persiste inconvenientes\nLoopzii 19: cuando carga videos unis quedan oscuros y otros mientas piensa blanco, muy lento al cargar\nLoopzii 23: siento la app lenta, y aveces genera errores como  este\nLoopzii 23: no carga, el video bien se interrumpe el sonido, si le doy bajar volumen para de reproducir, no reproduce rápido",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "2. no hya foto de perfil miniatura en la notificaciones",
+  "prioridad": "Media",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "3. no funcionan los push\n11b. A Karilyn no le están llegando los push de loopzii",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "7. espacio de imagenes centradas",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "9. revisar logica de me gusta, si yo me doy me gusta a una publicación mía se suma correctamente y aparece de forma visual aplicado el me gusta de mi parte. Si cierro la app y vuelvo a ingresar y valido de nuevo el me gusta, sale en el contador pero no la marcación de que yo fui el que le dio me gusta.",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "10. en el portal admin, no marca total usuarios\nCACHÉ NO ERROR",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "13. La ubicación de natalia mackenzie sale errada en producción",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "17. en este screen se evidencia que cuando uno busca amigos no sale una lista larga, por ejemplo tenemos los usuarios semillas que inician con @00 y solo aparecen 5 de 13 revisar esa logica",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Bug en la pantalla de chat\n✅Tiempo real en la pantalla de chats cuando llega un mensaje\n✅Duplicidad en mensajes",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Cuando aceptan solicitud de amistad, en notificaciones sale \"Usuario\" en vez del nombre del usuario, lo que no permite tener navegación al perfil\nFUE POR DESPLIEGUE A PRODUCCIÓN LANZANDO MICROSERVICIOS",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "5b. Cuando se comparte no sal e la imagen previa de la publicación\n\nMostrar como bloqueado para perfiles privados\n\nSe tiene que trabajar con devops porque hay que hacer ajustes en la landing page",
+  "prioridad": "Baja",
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "8b. A esta persona la app le está cambiando los colores de los videos",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "9b. Porfa elimina todos los perfiles de ustedes de prueba URGENTE",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "11b. Sale mucho esto\n\n- \"SIN CONEXIÓN A INTERNET\"\n\nSE DEBE SEGUIR REVISANDO PORQUE INFORMAN QUE LE PASA AÚN AL CLIENTE. NO SE LOGRA REPLICAR AÚN",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Loopzii 14; agregue es etas personas, me aceptaron y me seguían apareciendo para agregar  en sugeridos y una ya me había aceptado y la otra ya le había enviadoc",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Loopzii 17: cuando uno se devuelve dando scrol a la izquierda hay un salto raro",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Loopzii 20: el key Word, no funciona busco comunidades o post y no funciona, solo personas",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 2 Loopzii: agregué 2 comunidades y en sugeridas solo aparece una, La idea es que salgan como las personas, y tampoco es visible",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 3 loopzii: \n\nEl chat tiene un brinco extraño",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 4 loopzii: si entro a una notificación de comentario sale  desliza y aquí. No vas ningún lado",
+  "prioridad": "Media",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 5 loopzii: si una persona se confunde se ingresar algún dato en el registro, por ejemplo correo se sale y se duplican perfiles, y después ya no deja entrar",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 6 loopzii: solo era llegando a gmail no a Hotmail y otros\n\nSE HACEN PRUEBAS EN PRODUCCIÓN Y LLEGAN CORREOS A HOTMAL, SE DEJAN EVIDENCIAS EN EL CHAT ETIQUETANDO A SAMUEL",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 7 loopzii: si edito perfil el usuario duplica perfiles",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 8 loopzii: genera error al escribir Bogotá, solo permite el despliegue pero el teclado tapa\n\nSE ESTÁ VALIDANDO QUE SE PUEDE HACER CON EL DROPDOWN PARA QUENO SE DEBA HACER SCROLL",
+  "prioridad": "Baja",
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error Loopzii 9: agregue a una persona y sigue apareciendo para agregar, no cambia estado en feed",
+  "prioridad": "Media",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Error",
+  "descripcion": "Error 10 loopzii: persiste ingreso lento\nQUITAR TIEMPO DE SPLASH SCREEN",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "12. Se desea que los puntos se sumen desde toda la app, no solo en la comunidad\n\nSE DEBE EVALUAR POSTERIORMENTE PORQUE PERDERÍAMOS LA PROMES DE VALOR DE LA APP",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "4. desde la historia no se puede ir a perfil o la comunidad. En ocasiones hay una historia que se crea en una comunidad y no se puede ingresar a ninguna de las dos.",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "5. revisar logica de comunidades queda pantalla en blanci",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "6. personas que estan fuera de bogota el screen de pronto esta cortado",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "8. confuso quien me ha dado me gusta debatir con el equipo",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "14. no se puede ver quien reposteo una publicación mía, ni desde mi publicación, y tampoco en notificaciones. Parecido al me gusta, debería salir la opción de ver quien compartio mi publicación",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "15. Hay publicaciones que salen cortadas (imagen 4) - si es así, agregar funcionalidad de seleccionar portada o ajustar el tamaño respecto la vista.",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "16. Permitir subir videos de máximo un minuto, ahora no es posible",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "6b. No se pueden eliminar comentarios",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "6b. Permitir ver foto de perfil un poco más grande",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Loopzii 16: en la ciudad sale municipio y no deja ver nada más",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Tutorial en loopzii - BONOS, empresa y usuario",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Que nos permita ver todos los bonos así no tengamos los suficientes puntos",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Agregar en el detalle del bono lo que tenemos vs lo que necesitamos",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Permitir redimir un bono con el total de punto yno concomunidad\n\nSe define mantener lógica, pero mejorar la ux de bonos",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Contacto dentro del bono -> Link de wpp - Para ambos bono",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Error 1 loopzii: si voy a compartir dentro de la app, no puedo buscar a quien enviarle\nPRIORIDAD ALTA Karol Contreras",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "En el filtro de amigos permitir filtrar por empresa también",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Que las comunidades sugeridas aparezcan de primero en el módulo de comunidad",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "loopzii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Que las comunidades sugeridas aparezcan en el home, similar a sugerencia de amigos",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "1. Ajustar formato de hora en app cliente",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "2. Ajustar formato de correo que llega al experto",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "3. Validar cuenta de wompii que sea la corporativa",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "4. No está llegando la notificación al cliente de la solución de un reporte",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "5. Dejar consistente la lista de especialidades en app cliente vs experto",
+  "prioridad": "Media",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "6. El icono del pago exitoso no se está presentando",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "7. En el dashboard del superadmin revisar las etiquetas que sean consistentes",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "9. Revisar por qué no está saliendo la calificación cuando se finalizar un servicio. Si se cierra el modal de calificación desde cliente, cada que se abra la app se debe mostrar calificar servicio",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "10. Revisar porque no están saliendo todos los requisitos minimos, se prueban con 2 y llegó 1, se prueban con 3 y llegan 2",
+  "prioridad": "Media",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "11. Al cerrar la app y dejar en segundo plando sale error y toca iniciar sesión de nuevo -> Esto paso en ambas apps, en experto paso de la nada navegando incluso dentro de la app",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "EL FILTRO NOS FALLa, admin",
+  "prioridad": "Media",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "En dashboard el contador está mal, son 16 expertos activos.",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "Mapa y dirección no coincide\nNota: implementemos la sugerencias de dirección en experto, y que nos aparezca el mapa. Así como cliente.\nTambién validemos si podemos agregar selector de puntero en el mapa para seleccionar con mayor precisión la dirección",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "Correos (Samuel le llego confirmación de pago y despues rechazado)",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "Desde el admin sale algo raro en los servicios 24 y 26 (Sin nombre de experto y pago realizado)",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "Error al subir rut",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "Pago realizado y aceptado, despues de la app dice que no se pudo procesar el pago y despues en el servicio dice pago recibido",
+  "prioridad": "Alta",
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "Hora del mensaje incorrecta\nNOTA IMAGINE: Juan David Otero Torres Valide esto y me funciono bien, revisemos nuevamente igual\n\nSe hizo un refuerzo porque no se logra replicar en pruebas. Se valida para tratar de evidencia la incidencia y se autoriza despliegue a prod",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "En la descripción del problema no se puede corregir sin que te mande al final",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "Ajustar en el admin la visual de categorización del estado de los expertos (los activos, rechazados, pendientes, en revisión)",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Error",
+  "descripcion": "El número en el dashboard no coincide con los que están aprobados",
+  "prioridad": "Baja",
+  "estado": "Finalizado",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Implementar video de registro gofixii para experto",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Revisar firebase permite hasta 100k recuperaciones para actualizar",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Implementar noti push para cuando hay un servicio nuevo para el experto y que pueda hacer una cotización",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Permitir finalizar servicio en flujo largo para no realizar otro pago",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Mejorar el termino de diagnostico para que todos lo entiendan, ahora solo comprenden los de obras. Y permitir en un flujo largo finalizar servicio sin hacer un segundo cobro",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Mejorar visual de iconos para que sea más grande y buscar dar jerarquizar diferente",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "* Agregar información de cuanta es la ganancia por producto en el proveedor",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Solicitiud nueva: Reportar problema, duplicar funcionalidad de garantía\n\nPRIORIDAD",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Devoluciones dinero - Opcion: Credito en la app y/o transferencia bancaria",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Cobro de mano de obra: Después de haber pagado el diagnóstico y que ya hayan cotizado mano de obra, es confuso cuando cobran mano de obra porque no tiene titulo",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Resumen de pagos (Orden)\n@santiago.vargas@imagineapps.co  Es relacionado al orden del recibo de pago que le aparece a los clientes cuando solicitan material o hay un cobro adicional por mano de obra. Lo que te comente en la reu pasada",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Adición especialidad maquillaje, peluqueria y barberia",
+  "prioridad": null,
+  "estado": "En progreso",
+  "ambiente": "Desarrollo",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "A los expertos les salen las solicitudes de servicios vencidos \n\nNOTA IMAGINE: Definir que hacer con este historico para dejar igual trazabilidad",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "8. Actualizar iconos y especialidades en cliente con las propuesta generada de monica (prioridad baja)",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Orden de pago, dar mayor claridad para saber cuanto se debe pagar",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Habilitado el chat del experto con el cliente sin haber realizado el pago (no deberia suceder)",
+  "prioridad": null,
+  "estado": "Finalizado",
+  "ambiente": "Producción",
+  "version": "",
+  "creadoPor": "tech"
+ },
+ {
+  "modulo": "gofixii",
+  "tipo": "Nuevo requerimiento",
+  "descripcion": "Fee administrativo al cliente",
+  "prioridad": null,
+  "estado": "Por hacer",
+  "ambiente": "Pendiente",
+  "version": "",
+  "creadoPor": "tech"
+ }
+]
