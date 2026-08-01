@@ -8,7 +8,10 @@ import { construirCamposPorRol } from '@/lib/reportRules';
 export const runtime = 'nodejs';
 
 const PAGE_SIZE_DEFAULT = 20;
-const PAGE_SIZE_MAX = 100;
+// El tablero tipo Kanban pide todos los reportes del módulo de una vez
+// (agrupados por estado), por eso el máximo es más alto que una página
+// típica de tabla.
+const PAGE_SIZE_MAX = 300;
 
 export const GET = withErrorHandling(async (req) => {
   const sesion = await getSesion();

@@ -3,14 +3,19 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Prioridad, Estado, Ambiente, Tipo } from '@/components/Badge';
 import ReportForm from '@/components/ReportForm';
+import BoardView from '@/components/BoardView';
 import { TIPOS } from '@/lib/constants';
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
 const PAGE_SIZE = 20;
+// El tablero trae todos los reportes que hagan match con los filtros de una
+// sola vez (se agrupan en columnas por estado, no tiene paginación propia).
+const BOARD_LIMIT = 300;
 
 export default function ModuleView({ modulo, rol, nombre }) {
   const esTech = rol === 'tech';
+  const [vista, setVista] = useState('tabla');
   const [reportes, setReportes] = useState([]);
   const [total, setTotal] = useState(0);
   const [pagina, setPagina] = useState(1);
@@ -20,7 +25,12 @@ export default function ModuleView({ modulo, rol, nombre }) {
 
   const cargar = useCallback(async () => {
     setCargando(true);
-    const p = new URLSearchParams({ modulo: modulo.slug, page: String(pagina), limit: String(PAGE_SIZE) });
+    const esTablero = vista === 'tablero';
+    const p = new URLSearchParams({
+      modulo: modulo.slug,
+      page: String(esTablero ? 1 : pagina),
+      limit: String(esTablero ? BOARD_LIMIT : PAGE_SIZE),
+    });
     if (filtros.ambiente) p.set('ambiente', filtros.ambiente);
     if (filtros.tipo) p.set('tipo', filtros.tipo);
     if (filtros.desde) p.set('desde', filtros.desde);
@@ -30,10 +40,18 @@ export default function ModuleView({ modulo, rol, nombre }) {
     setReportes(data.items);
     setTotal(data.total);
     setCargando(false);
-  }, [modulo.slug, filtros, pagina]);
+  }, [modulo.slug, filtros, pagina, vista]);
 
   useEffect(() => { setPagina(1); }, [filtros]);
   useEffect(() => { cargar(); }, [cargar]);
+
+  async function moverEstado(id, nuevoEstado) {
+    setReportes((rs) => rs.map((r) => (r._id === id ? { ...r, estado: nuevoEstado } : r)));
+    const res = await fetch(`/api/reports/${id}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: nuevoEstado }),
+    });
+    if (!res.ok) cargar(); // revierte trayendo el estado real si falló
+  }
 
   const totalPaginas = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
@@ -44,7 +62,23 @@ export default function ModuleView({ modulo, rol, nombre }) {
           <div className="text-xs font-semibold tracking-widest text-slate-400 uppercase">Módulo {modulo.numero}</div>
           <h1 className="text-lg font-semibold">{modulo.nombre}</h1>
         </div>
-        <button className="btn-primary" onClick={() => setCreando(true)}>+ Nuevo reporte</button>
+        <div className="flex items-center gap-3">
+          <div className="inline-flex rounded-lg border border-slate-200 overflow-hidden text-sm">
+            <button
+              className={`px-3 py-1.5 ${vista === 'tabla' ? 'bg-ink text-white' : 'bg-white text-slate-600'}`}
+              onClick={() => setVista('tabla')}
+            >
+              Tabla
+            </button>
+            <button
+              className={`px-3 py-1.5 ${vista === 'tablero' ? 'bg-ink text-white' : 'bg-white text-slate-600'}`}
+              onClick={() => setVista('tablero')}
+            >
+              Tablero
+            </button>
+          </div>
+          <button className="btn-primary" onClick={() => setCreando(true)}>+ Nuevo reporte</button>
+        </div>
       </div>
 
       {/* filtros */}
@@ -85,55 +119,60 @@ export default function ModuleView({ modulo, rol, nombre }) {
         <div className="ml-auto text-sm text-slate-400 self-center">{total} reportes</div>
       </div>
 
-      {/* tabla */}
-      <div className="card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-slate-500">
-              <tr className="text-left">
-                <th className="px-3 py-2 font-medium">#</th>
-                <th className="px-3 py-2 font-medium min-w-[280px]">Comentario / Reporte</th>
-                <th className="px-3 py-2 font-medium">Tipo</th>
-                <th className="px-3 py-2 font-medium">Prioridad</th>
-                <th className="px-3 py-2 font-medium">Estado</th>
-                <th className="px-3 py-2 font-medium">Ambiente</th>
-                <th className="px-3 py-2 font-medium">Versión</th>
-                <th className="px-3 py-2 font-medium">Fecha</th>
-                <th className="px-3 py-2 font-medium"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {cargando ? (
-                <tr><td colSpan={9} className="px-3 py-10 text-center text-slate-400">Cargando…</td></tr>
-              ) : reportes.length === 0 ? (
-                <tr><td colSpan={9} className="px-3 py-10 text-center text-slate-400">
-                  Sin reportes todavía. Crea el primero con “Nuevo reporte”.
-                </td></tr>
-              ) : reportes.map((r) => (
-                <tr key={r._id} className={`align-top hover:bg-slate-50 ${!r.estado ? 'bg-fuchsia-50/40' : ''}`}>
-                  <td className="px-3 py-3 text-slate-400">{r.consecutivo}</td>
-                  <td className="px-3 py-3 max-w-[420px]">
-                    <div className="line-clamp-3 whitespace-pre-wrap text-slate-700">{r.descripcion}</div>
-                  </td>
-                  <td className="px-3 py-3"><Tipo value={r.tipo} /></td>
-                  <td className="px-3 py-3"><Prioridad value={r.prioridad} /></td>
-                  <td className="px-3 py-3"><Estado value={r.estado} /></td>
-                  <td className="px-3 py-3"><Ambiente value={r.ambiente} /></td>
-                  <td className="px-3 py-3 text-slate-500 whitespace-nowrap">{r.version || '—'}</td>
-                  <td className="px-3 py-3 text-slate-500 whitespace-nowrap">{fecha(r.createdAt)}</td>
-                  <td className="px-3 py-3">
-                    <Link href={`/reportes/${r._id}`} className="text-slate-700 underline underline-offset-2 whitespace-nowrap">
-                      Ver detalle
-                    </Link>
-                  </td>
+      {vista === 'tabla' ? (
+        <div className="card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 text-slate-500">
+                <tr className="text-left">
+                  <th className="px-3 py-2 font-medium">#</th>
+                  <th className="px-3 py-2 font-medium min-w-[280px]">Comentario / Reporte</th>
+                  <th className="px-3 py-2 font-medium">Tipo</th>
+                  <th className="px-3 py-2 font-medium">Prioridad</th>
+                  <th className="px-3 py-2 font-medium">Estado</th>
+                  <th className="px-3 py-2 font-medium">Ambiente</th>
+                  <th className="px-3 py-2 font-medium">Versión</th>
+                  <th className="px-3 py-2 font-medium">Fecha</th>
+                  <th className="px-3 py-2 font-medium"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {cargando ? (
+                  <tr><td colSpan={9} className="px-3 py-10 text-center text-slate-400">Cargando…</td></tr>
+                ) : reportes.length === 0 ? (
+                  <tr><td colSpan={9} className="px-3 py-10 text-center text-slate-400">
+                    Sin reportes todavía. Crea el primero con “Nuevo reporte”.
+                  </td></tr>
+                ) : reportes.map((r) => (
+                  <tr key={r._id} className={`align-top hover:bg-slate-50 ${!r.estado ? 'bg-fuchsia-50/40' : ''}`}>
+                    <td className="px-3 py-3 text-slate-400">{r.consecutivo}</td>
+                    <td className="px-3 py-3 max-w-[420px]">
+                      <div className="line-clamp-3 whitespace-pre-wrap text-slate-700">{r.descripcion}</div>
+                    </td>
+                    <td className="px-3 py-3"><Tipo value={r.tipo} /></td>
+                    <td className="px-3 py-3"><Prioridad value={r.prioridad} /></td>
+                    <td className="px-3 py-3"><Estado value={r.estado} /></td>
+                    <td className="px-3 py-3"><Ambiente value={r.ambiente} /></td>
+                    <td className="px-3 py-3 text-slate-500 whitespace-nowrap">{r.version || '—'}</td>
+                    <td className="px-3 py-3 text-slate-500 whitespace-nowrap">{fecha(r.createdAt)}</td>
+                    <td className="px-3 py-3">
+                      <Link href={`/reportes/${r._id}`} className="text-slate-700 underline underline-offset-2 whitespace-nowrap">
+                        Ver detalle
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : cargando ? (
+        <p className="text-slate-400 py-10 text-center">Cargando…</p>
+      ) : (
+        <BoardView reportes={reportes} esTech={esTech} onMover={moverEstado} />
+      )}
 
-      {totalPaginas > 1 && (
+      {vista === 'tabla' && totalPaginas > 1 && (
         <div className="flex items-center justify-center gap-3 mt-4 text-sm">
           <button className="btn-ghost" disabled={pagina <= 1} onClick={() => setPagina((p) => p - 1)}>
             ← Anterior
