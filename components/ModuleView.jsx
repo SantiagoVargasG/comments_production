@@ -22,7 +22,8 @@ export default function ModuleView({ modulo, rol, nombre }) {
   const [pagina, setPagina] = useState(1);
   const [cargando, setCargando] = useState(true);
   const [creando, setCreando] = useState(false);
-  const [filtros, setFiltros] = useState({ ambiente: '', tipo: '', desde: '', hasta: '' });
+  const [filtros, setFiltros] = useState({ ambiente: '', tipo: '', desde: '', hasta: '', busqueda: '' });
+  const [busquedaInput, setBusquedaInput] = useState('');
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -36,6 +37,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
     if (filtros.tipo) p.set('tipo', filtros.tipo);
     if (filtros.desde) p.set('desde', filtros.desde);
     if (filtros.hasta) p.set('hasta', filtros.hasta);
+    if (filtros.busqueda) p.set('busqueda', filtros.busqueda);
     const res = await fetch(`/api/reports?${p.toString()}`);
     const data = res.ok ? await res.json() : { items: [], total: 0 };
     setReportes(data.items);
@@ -45,6 +47,15 @@ export default function ModuleView({ modulo, rol, nombre }) {
 
   useEffect(() => { setPagina(1); }, [filtros]);
   useEffect(() => { cargar(); }, [cargar]);
+
+  // Debounce: espera a que la persona deje de escribir antes de disparar
+  // la búsqueda, en vez de una petición por cada tecla.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setFiltros((f) => ({ ...f, busqueda: busquedaInput.trim() }));
+    }, 300);
+    return () => clearTimeout(t);
+  }, [busquedaInput]);
 
   async function moverEstado(id, nuevoEstado) {
     setReportes((rs) => rs.map((r) => (r._id === id ? { ...r, estado: nuevoEstado } : r)));
@@ -85,6 +96,11 @@ export default function ModuleView({ modulo, rol, nombre }) {
       {/* filtros */}
       <div className="card p-3 my-4 flex flex-wrap items-end gap-3">
         <div>
+          <label className="label">Buscar (# o descripción)</label>
+          <input type="text" className="input" placeholder="Ej: 42 o pantalla negra" value={busquedaInput}
+            onChange={(e) => setBusquedaInput(e.target.value)} />
+        </div>
+        <div>
           <label className="label">Ambiente</label>
           <select className="input" value={filtros.ambiente}
             onChange={(e) => setFiltros((f) => ({ ...f, ambiente: e.target.value }))}>
@@ -112,8 +128,11 @@ export default function ModuleView({ modulo, rol, nombre }) {
           <input type="date" className="input" value={filtros.hasta}
             onChange={(e) => setFiltros((f) => ({ ...f, hasta: e.target.value }))} />
         </div>
-        {(filtros.ambiente || filtros.tipo || filtros.desde || filtros.hasta) && (
-          <button className="btn-ghost" onClick={() => setFiltros({ ambiente: '', tipo: '', desde: '', hasta: '' })}>
+        {(filtros.ambiente || filtros.tipo || filtros.desde || filtros.hasta || busquedaInput) && (
+          <button className="btn-ghost" onClick={() => {
+            setBusquedaInput('');
+            setFiltros({ ambiente: '', tipo: '', desde: '', hasta: '', busqueda: '' });
+          }}>
             Limpiar
           </button>
         )}

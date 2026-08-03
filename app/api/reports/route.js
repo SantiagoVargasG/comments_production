@@ -3,7 +3,7 @@ import { dbConnect } from '@/lib/mongodb';
 import { Report, siguienteConsecutivo } from '@/lib/models';
 import { getSesion } from '@/lib/auth';
 import { withErrorHandling } from '@/lib/apiHandler';
-import { construirCamposPorRol } from '@/lib/reportRules';
+import { construirCamposPorRol, coincideBusqueda } from '@/lib/reportRules';
 
 export const runtime = 'nodejs';
 
@@ -35,16 +35,28 @@ export const GET = withErrorHandling(async (req) => {
 
   const page = Math.max(1, parseInt(searchParams.get('page'), 10) || 1);
   const pageSize = Math.min(PAGE_SIZE_MAX, Math.max(1, parseInt(searchParams.get('limit'), 10) || PAGE_SIZE_DEFAULT));
+  const busqueda = (searchParams.get('busqueda') || '').trim();
 
-  const [items, total] = await Promise.all([
-    Report.find(q)
-      .select('-comentarios')
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * pageSize)
-      .limit(pageSize)
-      .lean(),
-    Report.countDocuments(q),
-  ]);
+  let items, total;
+  if (busqueda) {
+    // Coincidencia flexible (tildes/mayúsculas/espacios, por # o
+    // descripción) se resuelve en memoria: evita depender de índices de
+    // texto o normalizar datos existentes en Mongo para esta búsqueda.
+    const candidatos = await Report.find(q).select('-comentarios').sort({ createdAt: -1 }).lean();
+    const filtrados = candidatos.filter((r) => coincideBusqueda(r, busqueda));
+    total = filtrados.length;
+    items = filtrados.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+  } else {
+    [items, total] = await Promise.all([
+      Report.find(q)
+        .select('-comentarios')
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .lean(),
+      Report.countDocuments(q),
+    ]);
+  }
 
   return NextResponse.json({ items, total, page, pageSize });
 });
