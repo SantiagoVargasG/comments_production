@@ -1,7 +1,11 @@
 'use client';
 import { useState } from 'react';
+import { upload } from '@vercel/blob/client';
 
-// Sube archivos a /api/upload y devuelve [{url,tipo,nombre}] via onChange
+// Sube archivos directo desde el navegador a Vercel Blob (vía /api/upload
+// solo para autorizar el token) y devuelve [{url,tipo,nombre}] via onChange.
+// Subir directo evita el límite de ~4.5 MB que Vercel impone al body de una
+// función serverless normal, necesario para videos.
 export default function EvidenceUploader({ evidencias, onChange }) {
   const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState('');
@@ -12,14 +16,26 @@ export default function EvidenceUploader({ evidencias, onChange }) {
     setError('');
     setSubiendo(true);
     const nuevas = [];
-    for (const file of files) {
-      const fd = new FormData();
-      fd.append('file', file);
-      const res = await fetch('/api/upload', { method: 'POST', body: fd });
-      if (res.ok) nuevas.push(await res.json());
-      else { const d = await res.json(); setError(d.error || 'Error al subir'); }
+    try {
+      for (const file of files) {
+        const esVideo = file.type.startsWith('video/');
+        const esImagen = file.type.startsWith('image/');
+        if (!esVideo && !esImagen) {
+          setError('Solo se permiten imágenes o videos');
+          continue;
+        }
+        const blob = await upload(`evidencias/${Date.now()}-${file.name}`, file, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
+          clientPayload: file.type,
+        });
+        nuevas.push({ url: blob.url, tipo: esVideo ? 'video' : 'imagen', nombre: file.name });
+      }
+    } catch (err) {
+      setError(err.message || 'Error al subir');
+    } finally {
+      setSubiendo(false);
     }
-    setSubiendo(false);
     onChange([...(evidencias || []), ...nuevas]);
     e.target.value = '';
   }

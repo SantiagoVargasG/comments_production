@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
-import { put } from '@vercel/blob';
+import { handleUpload } from '@vercel/blob/client';
 import { getSesion } from '@/lib/auth';
 import { withErrorHandling } from '@/lib/apiHandler';
 
 export const runtime = 'nodejs';
 
-const MAX_BYTES = 20 * 1024 * 1024; // 20 MB
+// Límite generoso pensado para video (la subida va directo del navegador a
+// Vercel Blob, no pasa por esta función, así que no choca con el límite de
+// ~4.5 MB que Vercel impone al body de una función serverless normal).
+const MAX_BYTES = 200 * 1024 * 1024; // 200 MB
 
 export const POST = withErrorHandling(async (req) => {
   const sesion = await getSesion();
@@ -13,22 +16,26 @@ export const POST = withErrorHandling(async (req) => {
   if (!process.env.BLOB_READ_WRITE_TOKEN)
     return NextResponse.json({ error: 'Falta configurar Vercel Blob (BLOB_READ_WRITE_TOKEN)' }, { status: 500 });
 
-  const form = await req.formData();
-  const file = form.get('file');
-  if (!file) return NextResponse.json({ error: 'No se envió archivo' }, { status: 400 });
+  const body = await req.json();
 
-  const esVideo = file.type.startsWith('video/');
-  const esImagen = file.type.startsWith('image/');
-  if (!esVideo && !esImagen)
-    return NextResponse.json({ error: 'Solo se permiten imágenes o videos' }, { status: 400 });
-
-  if (file.size > MAX_BYTES)
-    return NextResponse.json({ error: 'El archivo supera el límite de 20 MB' }, { status: 413 });
-
-  const blob = await put(`evidencias/${Date.now()}-${file.name}`, file, { access: 'public' });
-  return NextResponse.json({
-    url: blob.url,
-    tipo: esVideo ? 'video' : 'imagen',
-    nombre: file.name,
-  });
+  try {
+    const jsonResponse = await handleUpload({
+      body,
+      request: req,
+      onBeforeGenerateToken: async (pathname, clientPayload) => {
+        const tipo = clientPayload || '';
+        if (!tipo.startsWith('image/') && !tipo.startsWith('video/')) {
+          throw new Error('Solo se permiten imágenes o videos');
+        }
+        return {
+          allowedContentTypes: ['image/*', 'video/*'],
+          maximumSizeInBytes: MAX_BYTES,
+          addRandomSuffix: false,
+        };
+      },
+    });
+    return NextResponse.json(jsonResponse);
+  } catch (err) {
+    return NextResponse.json({ error: err.message || 'No se pudo iniciar la subida' }, { status: 400 });
+  }
 });
