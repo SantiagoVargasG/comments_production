@@ -24,6 +24,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
   const [creando, setCreando] = useState(false);
   const [filtros, setFiltros] = useState({ ambiente: '', tipo: '', desde: '', hasta: '', busqueda: '' });
   const [busquedaInput, setBusquedaInput] = useState('');
+  const [orden, setOrden] = useState(null); // null = por defecto (recientes); 'consecutivo_asc' | 'consecutivo_desc'
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -38,15 +39,20 @@ export default function ModuleView({ modulo, rol, nombre }) {
     if (filtros.desde) p.set('desde', filtros.desde);
     if (filtros.hasta) p.set('hasta', filtros.hasta);
     if (filtros.busqueda) p.set('busqueda', filtros.busqueda);
+    if (orden) p.set('orden', orden);
     const res = await fetch(`/api/reports?${p.toString()}`);
     const data = res.ok ? await res.json() : { items: [], total: 0 };
     setReportes(data.items);
     setTotal(data.total);
     setCargando(false);
-  }, [modulo.slug, filtros, pagina, vista]);
+  }, [modulo.slug, filtros, pagina, vista, orden]);
 
-  useEffect(() => { setPagina(1); }, [filtros]);
+  useEffect(() => { setPagina(1); }, [filtros, orden]);
   useEffect(() => { cargar(); }, [cargar]);
+
+  function toggleOrden() {
+    setOrden((o) => (o === 'consecutivo_asc' ? 'consecutivo_desc' : 'consecutivo_asc'));
+  }
 
   // Debounce: espera a que la persona deje de escribir antes de disparar
   // la búsqueda, en vez de una petición por cada tecla.
@@ -128,10 +134,11 @@ export default function ModuleView({ modulo, rol, nombre }) {
           <input type="date" className="input" value={filtros.hasta}
             onChange={(e) => setFiltros((f) => ({ ...f, hasta: e.target.value }))} />
         </div>
-        {(filtros.ambiente || filtros.tipo || filtros.desde || filtros.hasta || busquedaInput) && (
+        {(filtros.ambiente || filtros.tipo || filtros.desde || filtros.hasta || busquedaInput || orden) && (
           <button className="btn-ghost" onClick={() => {
             setBusquedaInput('');
             setFiltros({ ambiente: '', tipo: '', desde: '', hasta: '', busqueda: '' });
+            setOrden(null);
           }}>
             Limpiar
           </button>
@@ -145,7 +152,16 @@ export default function ModuleView({ modulo, rol, nombre }) {
             <table className="w-full text-sm">
               <thead className="bg-slate-50 text-slate-500">
                 <tr className="text-left">
-                  <th className="px-3 py-2 font-medium">#</th>
+                  <th className="px-3 py-2 font-medium">
+                    <button
+                      type="button"
+                      className="flex items-center gap-1 hover:text-ink"
+                      onClick={toggleOrden}
+                      title="Ordenar por #"
+                    >
+                      # <span className="text-slate-400">{orden === 'consecutivo_asc' ? '↑' : orden === 'consecutivo_desc' ? '↓' : '↕'}</span>
+                    </button>
+                  </th>
                   <th className="px-3 py-2 font-medium min-w-[280px]">Comentario / Reporte</th>
                   <th className="px-3 py-2 font-medium">Tipo</th>
                   <th className="px-3 py-2 font-medium">Prioridad</th>

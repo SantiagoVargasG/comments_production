@@ -3,7 +3,7 @@ import { dbConnect } from '@/lib/mongodb';
 import { Report, siguienteConsecutivo } from '@/lib/models';
 import { getSesion } from '@/lib/auth';
 import { withErrorHandling } from '@/lib/apiHandler';
-import { construirCamposPorRol, coincideBusqueda } from '@/lib/reportRules';
+import { construirCamposPorRol, coincideBusqueda, compararReportes } from '@/lib/reportRules';
 
 export const runtime = 'nodejs';
 
@@ -36,21 +36,25 @@ export const GET = withErrorHandling(async (req) => {
   const page = Math.max(1, parseInt(searchParams.get('page'), 10) || 1);
   const pageSize = Math.min(PAGE_SIZE_MAX, Math.max(1, parseInt(searchParams.get('limit'), 10) || PAGE_SIZE_DEFAULT));
   const busqueda = (searchParams.get('busqueda') || '').trim();
+  const orden = searchParams.get('orden'); // 'consecutivo_asc' | 'consecutivo_desc' | null (por defecto: más recientes primero)
+  const sortSpec = orden === 'consecutivo_asc' ? { consecutivo: 1 } : orden === 'consecutivo_desc' ? { consecutivo: -1 } : { createdAt: -1 };
 
   let items, total;
   if (busqueda) {
     // Coincidencia flexible (tildes/mayúsculas/espacios, por # o
     // descripción) se resuelve en memoria: evita depender de índices de
     // texto o normalizar datos existentes en Mongo para esta búsqueda.
-    const candidatos = await Report.find(q).select('-comentarios').sort({ createdAt: -1 }).lean();
-    const filtrados = candidatos.filter((r) => coincideBusqueda(r, busqueda));
+    const candidatos = await Report.find(q).select('-comentarios').lean();
+    const filtrados = candidatos
+      .filter((r) => coincideBusqueda(r, busqueda))
+      .sort((a, b) => compararReportes(a, b, orden));
     total = filtrados.length;
     items = filtrados.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
   } else {
     [items, total] = await Promise.all([
       Report.find(q)
         .select('-comentarios')
-        .sort({ createdAt: -1 })
+        .sort(sortSpec)
         .skip((page - 1) * pageSize)
         .limit(pageSize)
         .lean(),
