@@ -121,8 +121,8 @@ export default function ModuleView({ modulo, rol, nombre }) {
         <div className="flex-1 min-w-[220px]">
           <label className="label">Buscar (# o descripción)</label>
           <div className="relative">
-            <IconSearch className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input type="text" className="input pl-9" placeholder="Ej: 42 o pantalla negra" value={busquedaInput}
+            <IconSearch className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <input type="text" className="input !pl-9" placeholder="Ej: 42 o pantalla negra" value={busquedaInput}
               onChange={(e) => setBusquedaInput(e.target.value)} />
           </div>
         </div>
@@ -207,7 +207,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
                     Sin reportes todavía. Crea el primero con “Nuevo reporte”.
                   </td></tr>
                 ) : reportes.map((r) => {
-                  const finalizado = r.estado === 'Finalizado';
+                  const finalizado = r.estado === 'Finalizado' && r.ambiente === 'Producción';
                   const TipoIcon = TIPO_ICON[r.tipo];
                   return (
                     <tr key={r._id} className={`align-top hover:bg-slate-50 transition-colors group ${!r.estado ? 'bg-fuchsia-50/40' : ''} ${finalizado ? 'opacity-60' : ''}`}>
