@@ -7,6 +7,7 @@ import EvidenceViewer from '@/components/EvidenceViewer';
 import EvidenceUploader from '@/components/EvidenceUploader';
 import { ETIQUETAS_COMBINADAS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
+import { usePasteHandler } from '@/lib/usePasteHandler';
 
 const fechaHora = (d) => new Date(d).toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
@@ -36,6 +37,7 @@ export default function ReportDetail({ id, rol, nombre }) {
   const [texto, setTexto] = useState('');
   const [evid, setEvid] = useState([]);
   const [enviando, setEnviando] = useState(false);
+  const handlePaste = usePasteHandler((nuevas) => setEvid(e => [...e, ...nuevas]));
 
   const cargar = useCallback(async () => {
     const res = await fetch(`/api/reports/${id}`);
@@ -204,8 +206,13 @@ export default function ReportDetail({ id, rol, nombre }) {
 
             <div className="p-4 border-t border-slate-100 bg-slate-50">
               <label className="label">Agregar comentario</label>
-              <textarea className="input min-h-[80px] bg-white" value={texto} onChange={(e) => setTexto(e.target.value)}
-                placeholder={esTech ? 'Deja evidencia del ajuste o una nota…' : 'Escribe tu comentario…'} />
+              <textarea
+                className="input min-h-[80px] bg-white"
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+                onPaste={handlePaste}
+                placeholder={esTech ? 'Deja evidencia del ajuste o una nota… (puedes pegar imágenes)' : 'Escribe tu comentario… (puedes pegar imágenes)'}
+              />
               <div className="flex items-center justify-between mt-3 gap-2 flex-wrap">
                 <EvidenceUploader evidencias={evid} onChange={setEvid} />
                 <button className="btn-primary" onClick={comentar} disabled={enviando}>

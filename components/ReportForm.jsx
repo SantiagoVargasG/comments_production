@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import EvidenceUploader from '@/components/EvidenceUploader';
 import { ETIQUETAS_COMBINADAS, PRIORIDADES, ESTADOS, AMBIENTES } from '@/lib/constants';
+import { usePasteHandler } from '@/lib/usePasteHandler';
 
 // Modal para crear un reporte nuevo. Cliente solo ve tipo/descripción/evidencia.
 export default function ReportForm({ modulo, esTech, onClose, onCreated }) {
@@ -12,6 +13,7 @@ export default function ReportForm({ modulo, esTech, onClose, onCreated }) {
   const [error, setError] = useState('');
   const [guardando, setGuardando] = useState(false);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+  const handlePaste = usePasteHandler((nuevas) => setEvidencias(e => [...e, ...nuevas]));
 
   async function guardar() {
     if (!form.descripcion.trim()) return setError('Escribe el comentario o reporte.');
@@ -44,8 +46,13 @@ export default function ReportForm({ modulo, esTech, onClose, onCreated }) {
           </div>
           <div>
             <label className="label">Comentario / Reporte</label>
-            <textarea className="input min-h-[100px]" value={form.descripcion} onChange={set('descripcion')}
-              placeholder="Describe el error, mejora o requerimiento…" />
+            <textarea
+              className="input min-h-[100px]"
+              value={form.descripcion}
+              onChange={set('descripcion')}
+              onPaste={handlePaste}
+              placeholder="Describe el error, mejora o requerimiento… (puedes pegar imágenes)"
+            />
           </div>
 
           {esTech && (
