@@ -1,12 +1,12 @@
 'use client';
 import { useState } from 'react';
 import EvidenceUploader from '@/components/EvidenceUploader';
-import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES } from '@/lib/constants';
+import { ETIQUETAS_COMBINADAS, PRIORIDADES, ESTADOS, AMBIENTES } from '@/lib/constants';
 
 // Modal para crear un reporte nuevo. Cliente solo ve tipo/descripción/evidencia.
 export default function ReportForm({ modulo, esTech, onClose, onCreated }) {
   const [form, setForm] = useState({
-    tipo: 'Error', descripcion: '', prioridad: '', estado: '', ambiente: 'Pendiente', version: '',
+    tipo: ETIQUETAS_COMBINADAS[0], descripcion: '', prioridad: '', estado: '', ambiente: 'Pendiente', version: '',
   });
   const [evidencias, setEvidencias] = useState([]);
   const [error, setError] = useState('');
@@ -37,9 +37,9 @@ export default function ReportForm({ modulo, esTech, onClose, onCreated }) {
         <h2 className="text-lg font-semibold mb-4">Nuevo reporte</h2>
         <div className="space-y-4">
           <div>
-            <label className="label">Tipo</label>
+            <label className="label">Etiqueta</label>
             <select className="input" value={form.tipo} onChange={set('tipo')}>
-              {TIPOS.map((t) => <option key={t}>{t}</option>)}
+              {ETIQUETAS_COMBINADAS.map((etiq) => <option key={etiq}>{etiq}</option>)}
             </select>
           </div>
           <div>

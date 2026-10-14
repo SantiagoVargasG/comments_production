@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Prioridad, Estado, Nuevo } from '@/components/Badge';
 import EvidenceViewer from '@/components/EvidenceViewer';
 import EvidenceUploader from '@/components/EvidenceUploader';
-import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS, ETIQUETAS, ETIQUETA_COLOR } from '@/lib/constants';
+import { ETIQUETAS_COMBINADAS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS, ETIQUETAS, ETIQUETA_COLOR } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
 
 const fechaHora = (d) => new Date(d).toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -127,7 +127,7 @@ export default function ReportDetail({ id, rol, nombre }) {
             {editando ? (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <Campo label="Tipo"><select className="input" value={edit.tipo || 'Error'} onChange={(e)=>setEdit({...edit,tipo:e.target.value})}>{TIPOS.map(t=><option key={t}>{t}</option>)}</select></Campo>
+                  <Campo label="Etiqueta"><select className="input" value={edit.tipo || ETIQUETAS_COMBINADAS[0]} onChange={(e)=>setEdit({...edit,tipo:e.target.value})}>{ETIQUETAS_COMBINADAS.map(etiq=><option key={etiq}>{etiq}</option>)}</select></Campo>
                   <Campo label="Prioridad"><select className="input" value={edit.prioridad || ''} onChange={(e)=>setEdit({...edit,prioridad:e.target.value})}><option value="">Sin definir</option>{PRIORIDADES.map(p=><option key={p}>{p}</option>)}</select></Campo>
                   <Campo label="Estado"><select className="input" value={edit.estado || ''} onChange={(e)=>setEdit({...edit,estado:e.target.value})}><option value="">Sin estado</option>{ESTADOS.map(s=><option key={s}>{s}</option>)}</select></Campo>
                   <Campo label="Ambiente"><select className="input" value={edit.ambiente || 'Pendiente'} onChange={(e)=>setEdit({...edit,ambiente:e.target.value})}>{AMBIENTES.map(a=><option key={a}>{a}</option>)}</select></Campo>

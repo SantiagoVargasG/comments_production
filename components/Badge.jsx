@@ -3,7 +3,7 @@ export function Badge({ children, className = '' }) {
 }
 
 import {
-  PRIORIDAD_COLOR, ESTADO_COLOR, AMBIENTE_COLOR, TIPO_COLOR,
+  PRIORIDAD_COLOR, ESTADO_COLOR, AMBIENTE_COLOR, TIPO_COLOR, TIPO_COLOR_COMBINADO,
 } from '@/lib/constants';
 
 export function Prioridad({ value }) {
@@ -20,7 +20,7 @@ export function Ambiente({ value }) {
 }
 export function Tipo({ value }) {
   if (!value) return <span className="text-slate-300">—</span>;
-  return <Badge className={TIPO_COLOR[value] || 'bg-slate-100'}>{value}</Badge>;
+  return <Badge className={TIPO_COLOR_COMBINADO[value] || 'bg-slate-100'}>{value}</Badge>;
 }
 export function Nuevo() {
   return <Badge className="bg-amber-100 text-amber-800 ring-1 ring-amber-300 font-semibold">Nuevo</Badge>;

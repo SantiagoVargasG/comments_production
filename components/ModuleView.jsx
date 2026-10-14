@@ -9,13 +9,23 @@ import {
   IconSearch, IconTable, IconKanban, IconChevronRight, IconChevronLeft,
   IconBug, IconPalette, IconLightbulb, IconArrowUp, IconArrowDown, IconArrowUpDown,
 } from '@/components/Icons';
-import { TIPOS, ETIQUETAS, ETIQUETA_COLOR } from '@/lib/constants';
+import { ETIQUETAS_COMBINADAS, ETIQUETA_COLOR } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
 const TIPO_ICON = { Error: IconBug, Mejora: IconPalette, 'Nuevo requerimiento': IconLightbulb };
-const TIPO_TEXT_COLOR = { Error: 'text-red-600', Mejora: 'text-sky-600', 'Nuevo requerimiento': 'text-violet-600' };
+const TIPO_TEXT_COLOR = {
+  Error: 'text-red-600',
+  Mejora: 'text-sky-600',
+  'Nuevo requerimiento': 'text-violet-600',
+  'Nuevo': 'text-purple-600',
+  'En revisión PM': 'text-yellow-600',
+  'Pregunta al cliente': 'text-cyan-600',
+  'Aceptado garantía': 'text-green-600',
+  'No aplica garantía': 'text-pink-600',
+  'Para cotizar': 'text-orange-600',
+};
 const ESTADO_DOT = {
   'Sin estado': 'bg-fuchsia-400',
   'Por hacer': 'bg-slate-400',
@@ -204,25 +214,14 @@ export default function ModuleView({ modulo, rol, nombre }) {
             </select>
           </div>
           <div>
-            <label className="label text-xs">Tipo</label>
+            <label className="label text-xs">Etiqueta</label>
             <select
               className="input text-sm"
               value={filtros.tipo}
               onChange={(e) => setFiltros((f) => ({ ...f, tipo: e.target.value }))}
             >
-              <option value="">Todos</option>
-              {TIPOS.map((t) => <option key={t}>{t}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="label text-xs">Etiqueta</label>
-            <select
-              className="input text-sm"
-              value={filtros.etiquetas}
-              onChange={(e) => setFiltros((f) => ({ ...f, etiquetas: e.target.value }))}
-            >
               <option value="">Todas</option>
-              {ETIQUETAS.map((etiq) => <option key={etiq}>{etiq}</option>)}
+              {ETIQUETAS_COMBINADAS.map((etiq) => <option key={etiq}>{etiq}</option>)}
             </select>
           </div>
           <div>
