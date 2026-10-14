@@ -155,62 +155,107 @@ export default function ModuleView({ modulo, rol, nombre }) {
         </div>
       </div>
 
+      {/* buscador principal */}
+      <div className="card shadow-sm p-4 my-4">
+        <label className="label mb-2 text-xs uppercase tracking-wider font-semibold text-slate-600">Buscar reportes</label>
+        <div className="relative">
+          <IconSearch className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            className="input !pl-10 !py-2.5 text-base"
+            placeholder="Escribe # del reporte o descripción..."
+            value={busquedaInput}
+            onChange={(e) => setBusquedaInput(e.target.value)}
+          />
+        </div>
+      </div>
+
       {/* filtros */}
-      <div className="card shadow-sm p-4 my-4 flex flex-wrap items-end gap-3">
-        <div className="flex-1 min-w-[220px]">
-          <label className="label">Buscar (# o descripción)</label>
-          <div className="relative">
-            <IconSearch className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-            <input type="text" className="input !pl-9" placeholder="Ej: 42 o pantalla negra" value={busquedaInput}
-              onChange={(e) => setBusquedaInput(e.target.value)} />
+      <div className="card shadow-sm p-4 mb-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-slate-600">Filtros</h3>
+          {(filtros.ambiente || filtros.tipo || filtros.etiquetas || filtros.desde || filtros.hasta || busquedaInput || orden) && (
+            <button
+              className="text-xs text-slate-500 hover:text-ink hover:underline font-medium transition-colors"
+              onClick={() => {
+                setBusquedaInput('');
+                setFiltros({ ambiente: '', tipo: '', etiquetas: '', desde: '', hasta: '', busqueda: '' });
+                setOrden(null);
+              }}
+            >
+              Limpiar todo
+            </button>
+          )}
+        </div>
+
+        {/* Primera fila de filtros */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-3">
+          <div>
+            <label className="label text-xs">Ambiente</label>
+            <select
+              className="input text-sm"
+              value={filtros.ambiente}
+              onChange={(e) => setFiltros((f) => ({ ...f, ambiente: e.target.value }))}
+            >
+              <option value="">Todos</option>
+              <option>Pendiente</option>
+              <option>Desarrollo</option>
+              <option>Producción</option>
+            </select>
+          </div>
+          <div>
+            <label className="label text-xs">Tipo</label>
+            <select
+              className="input text-sm"
+              value={filtros.tipo}
+              onChange={(e) => setFiltros((f) => ({ ...f, tipo: e.target.value }))}
+            >
+              <option value="">Todos</option>
+              {TIPOS.map((t) => <option key={t}>{t}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="label text-xs">Etiqueta</label>
+            <select
+              className="input text-sm"
+              value={filtros.etiquetas}
+              onChange={(e) => setFiltros((f) => ({ ...f, etiquetas: e.target.value }))}
+            >
+              <option value="">Todas</option>
+              {ETIQUETAS.map((etiq) => <option key={etiq}>{etiq}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="label text-xs">Desde</label>
+            <input
+              type="date"
+              className="input text-sm"
+              value={filtros.desde}
+              onChange={(e) => setFiltros((f) => ({ ...f, desde: e.target.value }))}
+            />
+          </div>
+          <div>
+            <label className="label text-xs">Hasta</label>
+            <input
+              type="date"
+              className="input text-sm"
+              value={filtros.hasta}
+              onChange={(e) => setFiltros((f) => ({ ...f, hasta: e.target.value }))}
+            />
           </div>
         </div>
-        <div>
-          <label className="label">Ambiente</label>
-          <select className="input" value={filtros.ambiente}
-            onChange={(e) => setFiltros((f) => ({ ...f, ambiente: e.target.value }))}>
-            <option value="">Todos</option>
-            <option>Pendiente</option>
-            <option>Desarrollo</option>
-            <option>Producción</option>
-          </select>
+
+        {/* Indicador de filtros activos y total */}
+        <div className="flex items-center justify-between text-xs text-slate-500">
+          <div>
+            {(filtros.ambiente || filtros.tipo || filtros.etiquetas || filtros.desde || filtros.hasta) && (
+              <span className="inline-block bg-slate-100 text-slate-600 px-2 py-1 rounded font-medium">
+                {[filtros.ambiente, filtros.tipo, filtros.etiquetas, filtros.desde, filtros.hasta].filter(Boolean).length} filtro{[filtros.ambiente, filtros.tipo, filtros.etiquetas, filtros.desde, filtros.hasta].filter(Boolean).length !== 1 ? 's' : ''} activo{[filtros.ambiente, filtros.tipo, filtros.etiquetas, filtros.desde, filtros.hasta].filter(Boolean).length !== 1 ? 's' : ''}
+              </span>
+            )}
+          </div>
+          <span className="font-medium text-slate-600">{total} reporte{total !== 1 ? 's' : ''}</span>
         </div>
-        <div>
-          <label className="label">Tipo</label>
-          <select className="input" value={filtros.tipo}
-            onChange={(e) => setFiltros((f) => ({ ...f, tipo: e.target.value }))}>
-            <option value="">Todos</option>
-            {TIPOS.map((t) => <option key={t}>{t}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="label">Etiqueta</label>
-          <select className="input" value={filtros.etiquetas}
-            onChange={(e) => setFiltros((f) => ({ ...f, etiquetas: e.target.value }))}>
-            <option value="">Todas</option>
-            {ETIQUETAS.map((etiq) => <option key={etiq}>{etiq}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="label">Desde</label>
-          <input type="date" className="input" value={filtros.desde}
-            onChange={(e) => setFiltros((f) => ({ ...f, desde: e.target.value }))} />
-        </div>
-        <div>
-          <label className="label">Hasta</label>
-          <input type="date" className="input" value={filtros.hasta}
-            onChange={(e) => setFiltros((f) => ({ ...f, hasta: e.target.value }))} />
-        </div>
-        {(filtros.ambiente || filtros.tipo || filtros.etiquetas || filtros.desde || filtros.hasta || busquedaInput || orden) && (
-          <button className="btn-ghost" onClick={() => {
-            setBusquedaInput('');
-            setFiltros({ ambiente: '', tipo: '', etiquetas: '', desde: '', hasta: '', busqueda: '' });
-            setOrden(null);
-          }}>
-            Limpiar
-          </button>
-        )}
-        <div className="ml-auto text-sm text-slate-400 self-center">{total} reportes</div>
       </div>
 
       {vista === 'tabla' ? (
