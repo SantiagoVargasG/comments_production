@@ -60,3 +60,13 @@ export function IconArrowUp(props) {
 export function IconArrowDown(props) {
   return <Svg {...props}><path d="M12 5v14M5 12l7 7 7-7" /></Svg>;
 }
+export function IconSupportAgent(props) {
+  return (
+    <Svg {...props}>
+      <path d="M4 13v-1a8 8 0 0 1 16 0v1" />
+      <rect x="2.5" y="13" width="4" height="6" rx="1.5" />
+      <rect x="17.5" y="13" width="4" height="6" rx="1.5" />
+      <path d="M20 19a4 4 0 0 1-4 4h-3" />
+    </Svg>
+  );
+}
