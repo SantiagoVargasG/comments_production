@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import { Report } from '@/lib/models';
 import { getSesion } from '@/lib/auth';
-import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES } from '@/lib/constants';
+import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES, ETIQUETAS } from '@/lib/constants';
 import { withErrorHandling } from '@/lib/apiHandler';
 import { puedeEditarReporte } from '@/lib/reportRules';
 
@@ -32,6 +32,7 @@ export const PATCH = withErrorHandling(async (req, { params }) => {
   if (body.estado === null || ESTADOS.includes(body.estado)) set.estado = body.estado;
   if (AMBIENTES.includes(body.ambiente)) set.ambiente = body.ambiente;
   if (typeof body.version === 'string') set.version = body.version;
+  if (Array.isArray(body.etiquetas)) set.etiquetas = body.etiquetas.filter((e) => ETIQUETAS.includes(e));
   const report = await Report.findByIdAndUpdate(id, { $set: set }, { returnDocument: 'after' }).lean();
   if (!report) return NextResponse.json({ error: 'No existe' }, { status: 404 });
   return NextResponse.json(report);

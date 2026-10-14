@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Prioridad, Estado, Nuevo } from '@/components/Badge';
 import EvidenceViewer from '@/components/EvidenceViewer';
 import EvidenceUploader from '@/components/EvidenceUploader';
-import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS } from '@/lib/constants';
+import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS, ETIQUETAS, ETIQUETA_COLOR } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
 
 const fechaHora = (d) => new Date(d).toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -59,6 +59,7 @@ export default function ReportDetail({ id, rol, nombre }) {
         descripcion: edit.descripcion, tipo: edit.tipo,
         prioridad: edit.prioridad || null, estado: edit.estado || null,
         ambiente: edit.ambiente, version: edit.version,
+        etiquetas: edit.etiquetas || [],
       }),
     });
     if (res.ok) { setEditando(false); cargar(); }
@@ -92,6 +93,9 @@ export default function ReportDetail({ id, rol, nombre }) {
             {!editando && esReporteNuevo(r) && <Nuevo />}
             {!editando && <Prioridad value={r.prioridad} />}
             {!editando && <Estado value={r.estado} />}
+            {!editando && r.etiquetas?.map((etiq) => (
+              <span key={etiq} className={`badge ${ETIQUETA_COLOR[etiq]}`}>{etiq}</span>
+            ))}
           </div>
         </div>
         {esTech && (
@@ -118,12 +122,28 @@ export default function ReportDetail({ id, rol, nombre }) {
           <div className="card p-5">
             <h2 className="text-sm font-semibold text-ink mb-4 pb-3 border-b border-slate-100">Metadata</h2>
             {editando ? (
-              <div className="grid grid-cols-2 gap-4">
-                <Campo label="Tipo"><select className="input" value={edit.tipo || 'Error'} onChange={(e)=>setEdit({...edit,tipo:e.target.value})}>{TIPOS.map(t=><option key={t}>{t}</option>)}</select></Campo>
-                <Campo label="Prioridad"><select className="input" value={edit.prioridad || ''} onChange={(e)=>setEdit({...edit,prioridad:e.target.value})}><option value="">Sin definir</option>{PRIORIDADES.map(p=><option key={p}>{p}</option>)}</select></Campo>
-                <Campo label="Estado"><select className="input" value={edit.estado || ''} onChange={(e)=>setEdit({...edit,estado:e.target.value})}><option value="">Sin estado</option>{ESTADOS.map(s=><option key={s}>{s}</option>)}</select></Campo>
-                <Campo label="Ambiente"><select className="input" value={edit.ambiente || 'Pendiente'} onChange={(e)=>setEdit({...edit,ambiente:e.target.value})}>{AMBIENTES.map(a=><option key={a}>{a}</option>)}</select></Campo>
-                <Campo label="Versión desplegada"><input className="input" value={edit.version || ''} onChange={(e)=>setEdit({...edit,version:e.target.value})} placeholder="Android 1.4.2 / iOS 1.4.2" /></Campo>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Campo label="Tipo"><select className="input" value={edit.tipo || 'Error'} onChange={(e)=>setEdit({...edit,tipo:e.target.value})}>{TIPOS.map(t=><option key={t}>{t}</option>)}</select></Campo>
+                  <Campo label="Prioridad"><select className="input" value={edit.prioridad || ''} onChange={(e)=>setEdit({...edit,prioridad:e.target.value})}><option value="">Sin definir</option>{PRIORIDADES.map(p=><option key={p}>{p}</option>)}</select></Campo>
+                  <Campo label="Estado"><select className="input" value={edit.estado || ''} onChange={(e)=>setEdit({...edit,estado:e.target.value})}><option value="">Sin estado</option>{ESTADOS.map(s=><option key={s}>{s}</option>)}</select></Campo>
+                  <Campo label="Ambiente"><select className="input" value={edit.ambiente || 'Pendiente'} onChange={(e)=>setEdit({...edit,ambiente:e.target.value})}>{AMBIENTES.map(a=><option key={a}>{a}</option>)}</select></Campo>
+                  <Campo label="Versión desplegada"><input className="input" value={edit.version || ''} onChange={(e)=>setEdit({...edit,version:e.target.value})} placeholder="Android 1.4.2 / iOS 1.4.2" /></Campo>
+                </div>
+                <div>
+                  <label className="label">Etiquetas</label>
+                  <div className="flex flex-wrap gap-2">
+                    {ETIQUETAS.map((etiq) => (
+                      <button
+                        key={etiq}
+                        onClick={() => setEdit({ ...edit, etiquetas: (edit.etiquetas || []).includes(etiq) ? (edit.etiquetas || []).filter(e => e !== etiq) : [...(edit.etiquetas || []), etiq] })}
+                        className={`px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition-all ${(edit.etiquetas || []).includes(etiq) ? ETIQUETA_COLOR[etiq] : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                      >
+                        {etiq}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-y-4 gap-x-6">

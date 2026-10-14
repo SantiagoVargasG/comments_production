@@ -15,7 +15,15 @@ const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digi
 
 const TIPO_ICON = { Error: IconBug, Mejora: IconPalette, 'Nuevo requerimiento': IconLightbulb };
 const TIPO_TEXT_COLOR = { Error: 'text-red-600', Mejora: 'text-sky-600', 'Nuevo requerimiento': 'text-violet-600' };
-const ESTADO_DOT = { 'Por hacer': 'bg-slate-400', 'En progreso': 'bg-blue-500', 'Finalizado': 'bg-emerald-500' };
+const ESTADO_DOT = {
+  'Sin estado': 'bg-fuchsia-400',
+  'Por hacer': 'bg-slate-400',
+  'En desarrollo': 'bg-blue-500',
+  'Pruebas PM': 'bg-amber-500',
+  'Validación cliente': 'bg-indigo-500',
+  'En revisión tiendas': 'bg-orange-500',
+  'Finalizado': 'bg-emerald-500',
+};
 
 function paginasVisibles(pagina, totalPaginas) {
   const set = new Set([1, totalPaginas, pagina - 1, pagina, pagina + 1]);

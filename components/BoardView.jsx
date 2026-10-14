@@ -2,13 +2,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Prioridad, Ambiente, Tipo, Nuevo } from '@/components/Badge';
-import { ESTADOS } from '@/lib/constants';
+import { ESTADOS, ETIQUETA_COLOR } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
 
-const COLUMNAS = [
-  { key: '', label: 'Sin estado' },
-  ...ESTADOS.map((e) => ({ key: e, label: e })),
-];
+const COLUMNAS = ESTADOS.map((e) => ({ key: e === 'Sin estado' ? '' : e, label: e }));
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
@@ -66,6 +63,13 @@ export default function BoardView({ reportes, esTech, onMover }) {
                     <Prioridad value={r.prioridad} />
                     <Ambiente value={r.ambiente} />
                   </div>
+                  {r.etiquetas?.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {r.etiquetas.map((etiq) => (
+                        <span key={etiq} className={`text-xs px-2 py-0.5 rounded-full font-medium ${ETIQUETA_COLOR[etiq]}`}>{etiq}</span>
+                      ))}
+                    </div>
+                  )}
                   <div className="flex items-center justify-between gap-2">
                     <Link href={`/reportes/${r._id}`} className="text-xs text-slate-600 underline underline-offset-2">
                       Ver detalle
