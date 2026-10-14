@@ -9,7 +9,7 @@ const COLUMNAS = ESTADOS.map((e) => ({ key: e === 'Sin estado' ? '' : e, label: 
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
 
-export default function BoardView({ reportes, esTech, onMover }) {
+export default function BoardView({ reportes, esTech, onMover, returnTo = '' }) {
   const [arrastrando, setArrastrando] = useState(null);
   const [sobreColumna, setSobreColumna] = useState(null);
 
@@ -71,7 +71,7 @@ export default function BoardView({ reportes, esTech, onMover }) {
                     </div>
                   )}
                   <div className="flex items-center justify-between gap-2">
-                    <Link href={`/reportes/${r._id}`} className="text-xs text-slate-600 underline underline-offset-2">
+                    <Link href={`/reportes/${r._id}${returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : ''}`} className="text-xs text-slate-600 underline underline-offset-2">
                       Ver detalle
                     </Link>
                     {esTech && (

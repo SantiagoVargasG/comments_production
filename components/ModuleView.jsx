@@ -351,7 +351,12 @@ export default function ModuleView({ modulo, rol, nombre }) {
       ) : cargando ? (
         <p className="text-slate-400 py-10 text-center">Cargando…</p>
       ) : (
-        <BoardView reportes={reportes} esTech={esTech} onMover={moverEstado} />
+        <BoardView
+          reportes={reportes}
+          esTech={esTech}
+          onMover={moverEstado}
+          returnTo={typeof window !== 'undefined' ? window.location.pathname + window.location.search : ''}
+        />
       )}
 
       {creando && (
