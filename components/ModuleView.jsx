@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Prioridad, Nuevo } from '@/components/Badge';
 import ReportForm from '@/components/ReportForm';
 import BoardView from '@/components/BoardView';
@@ -36,16 +37,27 @@ const PAGE_SIZE = 20;
 const BOARD_LIMIT = 300;
 
 export default function ModuleView({ modulo, rol, nombre }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const esTech = rol === 'tech';
-  const [vista, setVista] = useState('tabla');
+
+  // Inicializar estado desde URL si existen parámetros
+  const [vista, setVista] = useState(() => searchParams.get('vista') || 'tabla');
   const [reportes, setReportes] = useState([]);
   const [total, setTotal] = useState(0);
-  const [pagina, setPagina] = useState(1);
+  const [pagina, setPagina] = useState(() => parseInt(searchParams.get('pagina')) || 1);
   const [cargando, setCargando] = useState(true);
   const [creando, setCreando] = useState(false);
-  const [filtros, setFiltros] = useState({ ambiente: '', tipo: '', etiquetas: '', desde: '', hasta: '', busqueda: '' });
-  const [busquedaInput, setBusquedaInput] = useState('');
-  const [orden, setOrden] = useState(null); // null = por defecto (recientes); 'consecutivo_asc' | 'consecutivo_desc'
+  const [filtros, setFiltros] = useState({
+    ambiente: searchParams.get('ambiente') || '',
+    tipo: searchParams.get('tipo') || '',
+    etiquetas: searchParams.get('etiquetas') || '',
+    desde: searchParams.get('desde') || '',
+    hasta: searchParams.get('hasta') || '',
+    busqueda: searchParams.get('busqueda') || '',
+  });
+  const [busquedaInput, setBusquedaInput] = useState(searchParams.get('busqueda') || '');
+  const [orden, setOrden] = useState(searchParams.get('orden') || null);
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -84,6 +96,24 @@ export default function ModuleView({ modulo, rol, nombre }) {
     }, 300);
     return () => clearTimeout(t);
   }, [busquedaInput]);
+
+  // Guardar contexto en URL para mantenerlo al regresar
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (vista) p.set('vista', vista);
+    if (pagina > 1) p.set('pagina', String(pagina));
+    if (filtros.ambiente) p.set('ambiente', filtros.ambiente);
+    if (filtros.tipo) p.set('tipo', filtros.tipo);
+    if (filtros.etiquetas) p.set('etiquetas', filtros.etiquetas);
+    if (filtros.desde) p.set('desde', filtros.desde);
+    if (filtros.hasta) p.set('hasta', filtros.hasta);
+    if (filtros.busqueda) p.set('busqueda', filtros.busqueda);
+    if (orden) p.set('orden', orden);
+
+    const queryString = p.toString();
+    const newUrl = queryString ? `?${queryString}` : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+  }, [vista, pagina, filtros, orden]);
 
   async function moverEstado(id, nuevoEstado) {
     setReportes((rs) => rs.map((r) => (r._id === id ? { ...r, estado: nuevoEstado } : r)));
@@ -262,7 +292,10 @@ export default function ModuleView({ modulo, rol, nombre }) {
                       <td className="px-4 py-3 font-mono text-slate-500 whitespace-nowrap">{r.version || '—'}</td>
                       <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{fecha(r.createdAt)}</td>
                       <td className="px-4 py-3 text-right">
-                        <Link href={`/reportes/${r._id}`} className="text-ink hover:underline text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Link
+                          href={`/reportes/${r._id}?returnTo=${encodeURIComponent(window.location.pathname + window.location.search)}`}
+                          className="text-ink hover:underline text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
                           Ver detalle
                         </Link>
                       </td>

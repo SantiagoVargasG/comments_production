@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Prioridad, Estado, Nuevo } from '@/components/Badge';
 import EvidenceViewer from '@/components/EvidenceViewer';
 import EvidenceUploader from '@/components/EvidenceUploader';
@@ -27,6 +27,8 @@ function Meta({ label, value, mono }) {
 
 export default function ReportDetail({ id, rol, nombre }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('returnTo');
   const esTech = rol === 'tech';
   const [r, setR] = useState(null);
   const [editando, setEditando] = useState(false);
@@ -79,10 +81,11 @@ export default function ReportDetail({ id, rol, nombre }) {
 
   if (!r) return <p className="text-slate-400">Cargando…</p>;
   const modulo = MODULOS[r.modulo];
+  const backUrl = returnTo || `/modulos/${r.modulo}`;
 
   return (
     <div className="max-w-6xl mx-auto">
-      <Link href={`/modulos/${r.modulo}`} className="text-sm text-slate-500 hover:text-ink">← {modulo?.nombre}</Link>
+      <Link href={backUrl} className="text-sm text-slate-500 hover:text-ink">← {modulo?.nombre}</Link>
 
       {/* cabecera */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-3 mb-5">
