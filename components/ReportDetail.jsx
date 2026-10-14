@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Prioridad, Estado, Nuevo } from '@/components/Badge';
 import EvidenceViewer from '@/components/EvidenceViewer';
 import EvidenceUploader from '@/components/EvidenceUploader';
-import { ETIQUETAS_COMBINADAS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS, ETIQUETAS, ETIQUETA_COLOR } from '@/lib/constants';
+import { ETIQUETAS_COMBINADAS, PRIORIDADES, ESTADOS, AMBIENTES, MODULOS, ETIQUETAS, ETIQUETA_COLOR, ETIQUETAS_EDIT_COLOR } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
 
 const fechaHora = (d) => new Date(d).toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -140,7 +140,7 @@ export default function ReportDetail({ id, rol, nombre }) {
                       <button
                         key={etiq}
                         onClick={() => setEdit({ ...edit, etiquetas: (edit.etiquetas || []).includes(etiq) ? (edit.etiquetas || []).filter(e => e !== etiq) : [...(edit.etiquetas || []), etiq] })}
-                        className={`px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition-all ${(edit.etiquetas || []).includes(etiq) ? ETIQUETA_COLOR[etiq] : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                        className={`px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition-all ${(edit.etiquetas || []).includes(etiq) ? ETIQUETAS_EDIT_COLOR[etiq] : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                       >
                         {etiq}
                       </button>
