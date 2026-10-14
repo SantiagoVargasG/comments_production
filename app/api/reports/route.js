@@ -25,6 +25,8 @@ export const GET = withErrorHandling(async (req) => {
   if (ambiente) q.ambiente = ambiente;
   const tipo = searchParams.get('tipo');
   if (tipo) q.tipo = tipo;
+  const etiquetas = searchParams.get('etiquetas');
+  if (etiquetas) q.etiquetas = etiquetas;
   const desde = searchParams.get('desde');
   const hasta = searchParams.get('hasta');
   if (desde || hasta) {

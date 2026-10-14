@@ -8,7 +8,7 @@ import {
   IconSearch, IconTable, IconKanban, IconChevronRight, IconChevronLeft,
   IconBug, IconPalette, IconLightbulb, IconArrowUp, IconArrowDown, IconArrowUpDown,
 } from '@/components/Icons';
-import { TIPOS } from '@/lib/constants';
+import { TIPOS, ETIQUETAS, ETIQUETA_COLOR } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
 
 const fecha = (d) => (d ? new Date(d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
@@ -43,7 +43,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
   const [pagina, setPagina] = useState(1);
   const [cargando, setCargando] = useState(true);
   const [creando, setCreando] = useState(false);
-  const [filtros, setFiltros] = useState({ ambiente: '', tipo: '', desde: '', hasta: '', busqueda: '' });
+  const [filtros, setFiltros] = useState({ ambiente: '', tipo: '', etiquetas: '', desde: '', hasta: '', busqueda: '' });
   const [busquedaInput, setBusquedaInput] = useState('');
   const [orden, setOrden] = useState(null); // null = por defecto (recientes); 'consecutivo_asc' | 'consecutivo_desc'
 
@@ -57,6 +57,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
     });
     if (filtros.ambiente) p.set('ambiente', filtros.ambiente);
     if (filtros.tipo) p.set('tipo', filtros.tipo);
+    if (filtros.etiquetas) p.set('etiquetas', filtros.etiquetas);
     if (filtros.desde) p.set('desde', filtros.desde);
     if (filtros.hasta) p.set('hasta', filtros.hasta);
     if (filtros.busqueda) p.set('busqueda', filtros.busqueda);
@@ -153,6 +154,14 @@ export default function ModuleView({ modulo, rol, nombre }) {
           </select>
         </div>
         <div>
+          <label className="label">Etiqueta</label>
+          <select className="input" value={filtros.etiquetas}
+            onChange={(e) => setFiltros((f) => ({ ...f, etiquetas: e.target.value }))}>
+            <option value="">Todas</option>
+            {ETIQUETAS.map((etiq) => <option key={etiq}>{etiq}</option>)}
+          </select>
+        </div>
+        <div>
           <label className="label">Desde</label>
           <input type="date" className="input" value={filtros.desde}
             onChange={(e) => setFiltros((f) => ({ ...f, desde: e.target.value }))} />
@@ -162,10 +171,10 @@ export default function ModuleView({ modulo, rol, nombre }) {
           <input type="date" className="input" value={filtros.hasta}
             onChange={(e) => setFiltros((f) => ({ ...f, hasta: e.target.value }))} />
         </div>
-        {(filtros.ambiente || filtros.tipo || filtros.desde || filtros.hasta || busquedaInput || orden) && (
+        {(filtros.ambiente || filtros.tipo || filtros.etiquetas || filtros.desde || filtros.hasta || busquedaInput || orden) && (
           <button className="btn-ghost" onClick={() => {
             setBusquedaInput('');
-            setFiltros({ ambiente: '', tipo: '', desde: '', hasta: '', busqueda: '' });
+            setFiltros({ ambiente: '', tipo: '', etiquetas: '', desde: '', hasta: '', busqueda: '' });
             setOrden(null);
           }}>
             Limpiar
@@ -198,7 +207,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
                     </button>
                   </th>
                   <th className="px-4 py-3 font-semibold text-xs tracking-wide min-w-[280px]">Comentario / Reporte</th>
-                  <th className="px-4 py-3 font-semibold text-xs tracking-wide w-32">Tipo</th>
+                  <th className="px-4 py-3 font-semibold text-xs tracking-wide w-48">Tipo / Etiquetas</th>
                   <th className="px-4 py-3 font-semibold text-xs tracking-wide w-28">Prioridad</th>
                   <th className="px-4 py-3 font-semibold text-xs tracking-wide w-32">Estado</th>
                   <th className="px-4 py-3 font-semibold text-xs tracking-wide w-28">Ambiente</th>
@@ -227,11 +236,20 @@ export default function ModuleView({ modulo, rol, nombre }) {
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        {r.tipo ? (
-                          <span className={`inline-flex items-center gap-1 ${TIPO_TEXT_COLOR[r.tipo] || 'text-slate-500'}`}>
-                            {TipoIcon && <TipoIcon className="w-3.5 h-3.5" />} {r.tipo}
-                          </span>
-                        ) : <span className="text-slate-300">—</span>}
+                        <div className="space-y-1">
+                          {r.tipo ? (
+                            <span className={`inline-flex items-center gap-1 ${TIPO_TEXT_COLOR[r.tipo] || 'text-slate-500'}`}>
+                              {TipoIcon && <TipoIcon className="w-3.5 h-3.5" />} {r.tipo}
+                            </span>
+                          ) : <span className="text-slate-300">—</span>}
+                          {r.etiquetas?.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {r.etiquetas.map((etiq) => (
+                                <span key={etiq} className={`text-xs px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETIQUETA_COLOR[etiq]}`}>{etiq}</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td className="px-4 py-3"><Prioridad value={r.prioridad} /></td>
                       <td className="px-4 py-3">
