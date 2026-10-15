@@ -5,9 +5,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Prioridad, Nuevo } from '@/components/Badge';
 import ReportForm from '@/components/ReportForm';
 import BoardView from '@/components/BoardView';
+import ExportReportsModal from '@/components/ExportReportsModal';
 import {
   IconSearch, IconTable, IconKanban, IconChevronRight, IconChevronLeft,
-  IconBug, IconPalette, IconLightbulb, IconArrowUp, IconArrowDown, IconArrowUpDown,
+  IconBug, IconPalette, IconLightbulb, IconArrowUp, IconArrowDown, IconArrowUpDown, IconDownload,
 } from '@/components/Icons';
 import { ETIQUETAS_COMBINADAS, ETIQUETA_COLOR } from '@/lib/constants';
 import { esReporteNuevo } from '@/lib/reportRules';
@@ -58,6 +59,7 @@ export default function ModuleView({ modulo, rol, nombre }) {
   const [pagina, setPagina] = useState(() => parseInt(searchParams.get('pagina')) || 1);
   const [cargando, setCargando] = useState(true);
   const [creando, setCreando] = useState(false);
+  const [exportando, setExportando] = useState(false);
   const [filtros, setFiltros] = useState({
     ambiente: searchParams.get('ambiente') || '',
     tipo: searchParams.get('tipo') || '',
@@ -161,7 +163,12 @@ export default function ModuleView({ modulo, rol, nombre }) {
               <IconKanban className="w-4 h-4" /> Tablero
             </button>
           </div>
-          <button className="btn-primary ml-auto md:ml-0" onClick={() => setCreando(true)}>+ Nuevo reporte</button>
+          <div className="flex gap-2 ml-auto md:ml-0">
+            <button className="btn-ghost flex items-center gap-2" onClick={() => setExportando(true)}>
+              <IconDownload className="w-4 h-4" /> Exportar
+            </button>
+            <button className="btn-primary" onClick={() => setCreando(true)}>+ Nuevo reporte</button>
+          </div>
         </div>
       </div>
 
@@ -409,6 +416,14 @@ export default function ModuleView({ modulo, rol, nombre }) {
           esTech={esTech}
           onClose={() => setCreando(false)}
           onCreated={() => { setCreando(false); cargar(); }}
+        />
+      )}
+
+      {exportando && (
+        <ExportReportsModal
+          reportes={reportes}
+          modulo={modulo}
+          onClose={() => setExportando(false)}
         />
       )}
     </div>
