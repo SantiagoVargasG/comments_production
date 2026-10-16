@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import JSZip from 'jszip';
 import { ETIQUETAS_COMBINADAS, ESTADOS, PRIORIDADES, AMBIENTES } from '@/lib/constants';
 import { IconDownload } from '@/components/Icons';
 
@@ -61,7 +62,7 @@ export default function ExportReportsModal({ reportes, modulo, onClose }) {
     return md;
   }
 
-  function descargar() {
+  function descargarMD() {
     const contenido = generarMarkdown();
     const blob = new Blob([contenido], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
@@ -73,6 +74,88 @@ export default function ExportReportsModal({ reportes, modulo, onClose }) {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     onClose();
+  }
+
+  async function descargarZip() {
+    const zip = new JSZip();
+    const contenido = generarMarkdown();
+
+    const reportesFiltrados = reportes.filter((r) => {
+      if (filtros.tipo && r.tipo !== filtros.tipo) return false;
+      if (filtros.estado && r.estado !== filtros.estado) return false;
+      if (filtros.ambiente && r.ambiente !== filtros.ambiente) return false;
+      if (filtros.prioridad && r.prioridad !== filtros.prioridad) return false;
+      return true;
+    });
+
+    // Agregar el markdown
+    zip.file('reporte.md', contenido);
+
+    // Agregar imágenes en carpeta /images
+    const imageFolder = zip.folder('images');
+    let imagenCount = 0;
+
+    for (const reporte of reportesFiltrados) {
+      // Evidencias del reporte
+      if (reporte.evidencias?.length > 0) {
+        for (const evidencia of reporte.evidencias) {
+          if (evidencia.url) {
+            try {
+              const response = await fetch(evidencia.url);
+              const blob = await response.blob();
+              const filename = `reporte-${reporte.consecutivo}-${imagenCount}.${extraerExtension(evidencia.url)}`;
+              imageFolder.file(filename, blob);
+              imagenCount++;
+            } catch (error) {
+              console.error(`Error descargando imagen ${evidencia.url}:`, error);
+            }
+          }
+        }
+      }
+
+      // Evidencias de comentarios
+      if (reporte.comentarios?.length > 0) {
+        for (const comentario of reporte.comentarios) {
+          if (comentario.evidencias?.length > 0) {
+            for (const evidencia of comentario.evidencias) {
+              if (evidencia.url) {
+                try {
+                  const response = await fetch(evidencia.url);
+                  const blob = await response.blob();
+                  const filename = `reporte-${reporte.consecutivo}-comentario-${imagenCount}.${extraerExtension(evidencia.url)}`;
+                  imageFolder.file(filename, blob);
+                  imagenCount++;
+                } catch (error) {
+                  console.error(`Error descargando imagen ${evidencia.url}:`, error);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Generar y descargar ZIP
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `reportes-${modulo.slug}-${new Date().toISOString().split('T')[0]}.zip`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    onClose();
+  }
+
+  function extraerExtension(url) {
+    try {
+      const pathname = new URL(url).pathname;
+      const match = pathname.match(/\.(jpg|jpeg|png|gif|webp|bmp)$/i);
+      return match ? match[1].toLowerCase() : 'jpg';
+    } catch {
+      return 'jpg';
+    }
   }
 
   const reportesFiltrados = reportes.filter((r) => {
@@ -146,8 +229,11 @@ export default function ExportReportsModal({ reportes, modulo, onClose }) {
 
         <div className="flex justify-end gap-2">
           <button className="btn-ghost" onClick={onClose}>Cancelar</button>
-          <button className="btn-primary flex items-center gap-2" onClick={descargar}>
-            <IconDownload className="w-4 h-4" /> Descargar
+          <button className="btn-ghost flex items-center gap-2" onClick={descargarMD}>
+            <IconDownload className="w-4 h-4" /> Solo MD
+          </button>
+          <button className="btn-primary flex items-center gap-2" onClick={descargarZip}>
+            <IconDownload className="w-4 h-4" /> ZIP + Imágenes
           </button>
         </div>
       </div>
