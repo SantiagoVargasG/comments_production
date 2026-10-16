@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import { Report } from '@/lib/models';
 import { getSesion } from '@/lib/auth';
-import { TIPOS, PRIORIDADES, ESTADOS, AMBIENTES, ETIQUETAS } from '@/lib/constants';
+import { TIPOS, ETIQUETAS_COMBINADAS, PRIORIDADES, ESTADOS, AMBIENTES, ETIQUETAS } from '@/lib/constants';
 import { withErrorHandling } from '@/lib/apiHandler';
 import { puedeEditarReporte } from '@/lib/reportRules';
 
@@ -27,7 +27,7 @@ export const PATCH = withErrorHandling(async (req, { params }) => {
   await dbConnect();
   const set = {};
   if (typeof body.descripcion === 'string') set.descripcion = body.descripcion.trim();
-  if (TIPOS.includes(body.tipo)) set.tipo = body.tipo;
+  if (ETIQUETAS_COMBINADAS.includes(body.tipo)) set.tipo = body.tipo;
   if (body.prioridad === null || PRIORIDADES.includes(body.prioridad)) set.prioridad = body.prioridad;
   if (body.estado === null || ESTADOS.includes(body.estado)) set.estado = body.estado;
   if (AMBIENTES.includes(body.ambiente)) set.ambiente = body.ambiente;
